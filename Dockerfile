@@ -6,4 +6,4 @@ WORKDIR /usr/src/bot
 COPY . /usr/src/bot
 RUN npm install
 
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
