@@ -10,7 +10,7 @@ services:
       PGPASSWORD: 
       PGDATABASE: bot
       PGHOST: db
-      BOT_TOKEN: 
+      TOKEN: 
       SHORT_API_KEY: 
       CLIENT_ID: 726095832822317106
       GUILD_ID: 
