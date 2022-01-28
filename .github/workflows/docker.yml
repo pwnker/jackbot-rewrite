@@ -1,0 +1,21 @@
+name: Build Docker Container
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build Docker Container
+      run: docker build -t pwnker/jackbot:latest .
+
+    - name: Login to Docker Hub
+      run: docker login --username ${{ secrets.docker_username }} --password ${{ secrets.docker_password }}
+      if: github.ref == 'refs/heads/main'
+
+    - name: Push to Docker Hub
+      run: docker push cyberdiscovery/cdbot:latest
+      if: github.ref == 'refs/heads/main'
