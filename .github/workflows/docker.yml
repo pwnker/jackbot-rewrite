@@ -10,7 +10,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build Docker Container
-      run: docker buildx build -t pwnker/jackbot:latest --platform linux/arm64,linux/amd64 .
+      run: docker buildx build -t pwnker/jackbot:latest --platform linux/arm64 .
 
     - name: Login to Docker Hub
       run: docker login -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
