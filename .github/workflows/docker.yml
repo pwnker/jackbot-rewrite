@@ -6,22 +6,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - 
-    name: Checkout repository
-    uses: actions/checkout@v2
-    - 
-    uses: docker/setup-buildx-action@v1
-    id: buildx
-    with:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - uses: docker/setup-buildx-action@v1
+      id: buildx
+      with:
       install: true
-    - 
-    name: Build Docker Container
-    run: docker build -t pwnker/jackbot:latest --platform linux/arm64 .
-    - 
-    name: Login to Docker Hub
-    run: docker login -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
-    if: github.ref == 'refs/heads/main'
-    - 
-    name: Push to Docker Hub
-    run: docker push pwnker/jackbot:latest
-    if: github.ref == 'refs/heads/main'
+
+    - name: Build Docker Container
+      run: docker build -t pwnker/jackbot:latest --platform linux/arm64 .
+
+    - name: Login to Docker Hub
+      run: docker login -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
+      if: github.ref == 'refs/heads/main'
+
+    - name: Push to Docker Hub
+      run: docker push pwnker/jackbot:latest
+      if: github.ref == 'refs/heads/main'
