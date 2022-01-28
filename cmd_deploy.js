@@ -31,7 +31,7 @@ const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
       .then(() => console.log("Successfully registered guild slash commands."))
       .catch(console.error);
 
-    if (!process.env.DEV_MODE === 1) {
+    if (!process.env.DEV_MODE) {
       await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
         body: commands,
       });
