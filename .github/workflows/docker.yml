@@ -9,19 +9,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      id: buildx
-      uses: ./
-      with:
-        version: latest
-
     - name: Build Docker Container
-      run: docker build -t pwnker/jackbot:latest .
+      run: docker buildx build -t pwnker/jackbot:latest --platform linux/arm64,linux/amd64 .
 
     - name: Login to Docker Hub
       run: docker login -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
       if: github.ref == 'refs/heads/main'
 
     - name: Push to Docker Hub
-      run:  docker buildx build --output "type=image,push=true" --platform arm64
+      run: docker push pwnker/jackbot:latest
       if: github.ref == 'refs/heads/main'
