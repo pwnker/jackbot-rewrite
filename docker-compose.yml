@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   bot:
-    build: .
+    image: pwnker/jackbot:latest
     depends_on:
       - db
     environment:
@@ -29,3 +29,8 @@ services:
     restart: always
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+
+  watchtower:
+    image: containrrr/watchtower 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
