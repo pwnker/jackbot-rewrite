@@ -12,7 +12,7 @@ services:
       PGHOST: db
       TOKEN: 
       SHORT_API_KEY: 
-      CLIENT_ID: 726095832822317106
+      CLIENT_ID: 936735120906412113
       GUILD_ID: 
     networks:
       - default
