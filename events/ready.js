@@ -15,12 +15,11 @@ module.exports = {
 			per_page: 1
 		  })
 		  
-
 		const embed = new MessageEmbed()
 		.setTitle('Restarted')
 		.setDescription('JackBot has restarted and pulled the latest changes into production.')
 		.addFields(
-			{ name: 'Commit', value: `[${response.data[0].commit.message}](${response.data[0].commit.url})` },
+			{ name: 'Commit', value: `[${response.data[0].commit.message}](${response.data[0].html_url})` },
 			{ name: 'Author', value: `${response.data[0].commit.author.name}` },
 		)
 		.setTimestamp()
