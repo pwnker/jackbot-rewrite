@@ -29,8 +29,8 @@ module.exports = {
 		  
 
 		console.log(`Ready! Logged in as ${client.user.tag}`);
-		client.user.setActivity(`${client.users.cache.size} discord users`, { type: "WATCHING" });
+		client.user.setActivity(`${client.guilds.cache.size} servers`, { type: "WATCHING" });
 		setInterval (() => {
-		client.user.setActivity(`${client.users.cache.size} discord users`, { type: "WATCHING" });
+		client.user.setActivity(`${client.guilds.cache.size} servers`, { type: "WATCHING" });
 		}, 10800000);
 }};
