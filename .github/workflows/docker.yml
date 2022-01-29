@@ -21,7 +21,9 @@ jobs:
       run: docker login -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
       if: github.ref == 'refs/heads/main'
 
+    - name: Tag image
+      run: docker tag jackbot:latest ${{secrets.docker_username}}/jackbot:latest
+
     - name: Push to Docker Hub
       run: docker push pwnker/jackbot:latest
-      tags: ${{ steps.build-image.outputs.tags }}
       if: github.ref == 'refs/heads/main'
