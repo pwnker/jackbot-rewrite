@@ -22,5 +22,6 @@ jobs:
       if: github.ref == 'refs/heads/main'
 
     - name: Push to Docker Hub
-      run: docker push -a pwnker/jackbot
+      run: docker push pwnker/jackbot:latest
+      tags: ${{ steps.build-image.outputs.tags }}
       if: github.ref == 'refs/heads/main'
