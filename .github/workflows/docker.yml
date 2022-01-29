@@ -22,5 +22,5 @@ jobs:
       if: github.ref == 'refs/heads/main'
 
     - name: Push to Docker Hub
-      run: docker push pwnker/jackbot:latest
+      run: docker push -a pwnker/jackbot
       if: github.ref == 'refs/heads/main'
