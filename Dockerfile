@@ -1,4 +1,4 @@
-FROM arm64v8/node:latest
+FROM node:latest
 
 RUN mkdir -p /usr/src/bot
 WORKDIR /usr/src/bot
