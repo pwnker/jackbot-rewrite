@@ -6,14 +6,10 @@ module.exports = {
     .setName("shorten")
     .setDescription("Shorten a link.")
     .addStringOption((option) =>
-      option.setName("url")
-	  .setDescription("The long url.")
-	  .setRequired(true)
+      option.setName("url").setDescription("The long url.").setRequired(true)
     )
     .addStringOption((option) =>
-      option
-        .setName("slug")
-        .setDescription("The slug for the URL.")
+      option.setName("slug").setDescription("The slug for the URL.")
     ),
 
   async execute(interaction) {
@@ -24,7 +20,7 @@ module.exports = {
       });
     }
     const url = interaction.options.getString("url");
-	const slug = interaction.options.getString("slug");
+    const slug = interaction.options.getString("slug");
     interaction.reply({
       content: await shortenUrl(url, slug),
       ephemeral: true,

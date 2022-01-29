@@ -35,7 +35,7 @@ const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
       await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
         body: commands,
       });
-      console.log("Successfully registered global slash commands.")
+      console.log("Successfully registered global slash commands.");
     }
 
     console.log("Successfully reloaded slash commands.");
