@@ -9,21 +9,22 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - uses: docker/setup-buildx-action@v1
-      id: buildx
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+    uses: docker/login-action@v1 
+    with:
+      username: ${{ secrets.DOCKERHUB_USERNAME }}
+      password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+    - name: Build and push
+      uses: docker/build-push-action@v2
       with:
-        install: true
-
-    - name: Build Docker Container
-      run: docker build -t pwnker/jackbot:latest .
-
-    - name: Login to Docker Hub
-      run: docker login -u ${{ secrets.docker_username }} -p ${{ secrets.docker_password }}
-      if: github.ref == 'refs/heads/main'
-
-    - name: Tag image
-      run: docker tag jackbot:latest ${{secrets.docker_username}}/jackbot:latest
-
-    - name: Push to Docker Hub
-      run: docker push pwnker/jackbot:latest
-      if: github.ref == 'refs/heads/main'
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: pwnker/jackbot:latest
