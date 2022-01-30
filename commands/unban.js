@@ -29,7 +29,7 @@ module.exports = {
     user = interaction.options.getUser("user");
     reason = interaction.options.getString("reason") || "No Reason";
 
-    await interaction.guild.bans.remove(user.id, reason).catch((err) => {});
+    await interaction.guild.bans.remove(user.id, reason)
     await interaction.reply({
       content: `Unbanned **${user.username}#${user.discriminator}**`,
       ephemeral: true,
@@ -51,6 +51,5 @@ module.exports = {
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
       .send({ embeds: [embed] })
-      .catch((err) => {});
   },
 };

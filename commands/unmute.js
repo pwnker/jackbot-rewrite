@@ -37,7 +37,7 @@ module.exports = {
       });
     }
 
-    await member.timeout(null, reason).catch((err) => {});
+    await member.timeout(null, reason)
     await interaction.reply({
       content: `Unmuted <@${user.id}>.`,
       ephemeral: true,
@@ -59,7 +59,6 @@ module.exports = {
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
       .send({ embeds: [embed] })
-      .catch((err) => {});
 
     dmEmbed = new MessageEmbed()
       .setColor("AQUA")

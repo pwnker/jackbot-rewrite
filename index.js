@@ -47,8 +47,19 @@ client.on("interactionCreate", async (interaction) => {
       await command.execute(interaction);
     } catch (error) {
       console.error(error);
+      errorEmbed = new MessageEmbed()
+        .setColor("RED")
+        .setTitle(error.name)
+        .setDescription("```" + error.stack + "```")
+        .setTimestamp()
+
+
+      client.channels.cache
+        .get(process.env.BOT_LOG_CHANNEL)
+        .send({ embeds: [errorEmbed] });
+
       return interaction.reply({
-        content: "There was an error while executing this command!",
+        content: "There was an error while executing this command! This error has been reported.",
         ephemeral: true,
       });
     }
@@ -108,8 +119,16 @@ client.on("interactionCreate", async (interaction) => {
     await button.execute(interaction);
   } catch (error) {
     console.error(error);
+    errorEmbed = new MessageEmbed()
+        .setColor("RED")
+        .setTitle(error.name)
+        .setDescription("```" + error.stack + "```");
+
+      client.channels.cache
+        .get(process.env.BOT_LOG_CHANNEL)
+        .send({ embeds: [errorEmbed] });
     return interaction.reply({
-      content: "There was an error while using this button!",
+      content: "There was an error while using this button! This error has been reported.",
       ephemeral: true,
     });
   }
@@ -133,8 +152,16 @@ client.on("interactionCreate", async (interaction) => {
     await menu.execute(interaction);
   } catch (error) {
     console.error(error);
+    errorEmbed = new MessageEmbed()
+        .setColor("RED")
+        .setTitle(error.name)
+        .setDescription("```" + error.stack + "```");
+
+      client.channels.cache
+        .get(process.env.BOT_LOG_CHANNEL)
+        .send({ embeds: [errorEmbed] });
     return interaction.reply({
-      content: "There was an error while using this menu!",
+      content: "There was an error while using this menu! This error has been reported.",
       ephemeral: true,
     });
   }
@@ -142,5 +169,32 @@ client.on("interactionCreate", async (interaction) => {
 
 // db
 client.db = new Enmap({ name: "bot" });
+
+// errors
+
+process.on("unhandledRejection", (error) => {
+  console.error("Unhandled promise rejection:", error);
+  errorEmbed = new MessageEmbed()
+        .setColor("RED")
+        .setTitle(error.name)
+        .setDescription("```" + error.stack + "```");
+
+      client.channels.cache
+        .get(process.env.BOT_LOG_CHANNEL)
+        .send({ embeds: [errorEmbed] });
+
+});
+
+client.on("shardError", (error) => {
+  console.error("A websocket connection encountered an error:", error);
+  errorEmbed = new MessageEmbed()
+        .setColor("RED")
+        .setTitle(error.name)
+        .setDescription("```" + error.stack + "```");
+
+      client.channels.cache
+        .get(process.env.BOT_LOG_CHANNEL)
+        .send({ embeds: [errorEmbed] });
+});
 
 client.login(process.env.TOKEN);

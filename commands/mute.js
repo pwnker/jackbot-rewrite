@@ -61,9 +61,7 @@ module.exports = {
     var time = parseInt(duration.replace(/[^0-9]/g, ""));
     var multiplyer = units.get(duration.replace(/[0-9]/g, ""));
 
-    await member.timeout(time * multiplyer, reason).catch((err) => {
-      console.log(err);
-    });
+    await member.timeout(time * multiplyer, reason)
     await interaction.reply({
       content: `<@${user.id}> has been muted for ${duration}`,
       ephemeral: true,
@@ -86,7 +84,6 @@ module.exports = {
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
       .send({ embeds: [embed] })
-      .catch((err) => {});
 
     dmEmbed = new MessageEmbed()
       .setColor("RED")

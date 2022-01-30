@@ -55,7 +55,7 @@ module.exports = {
 
     await member.send({ embeds: [dmEmbed] }).catch((err) => {});
 
-    await member.kick({ reason: reason }).catch((err) => {});
+    await member.kick({ reason: reason })
     await interaction.reply({
       content: `<@${user.id}> has been kicked.`,
       ephemeral: true,
@@ -77,6 +77,5 @@ module.exports = {
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
       .send({ embeds: [embed] })
-      .catch((err) => {});
   },
 };

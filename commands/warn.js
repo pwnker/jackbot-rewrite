@@ -59,7 +59,6 @@ module.exports = {
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
       .send({ embeds: [embed] })
-      .catch((err) => {});
 
     dmEmbed = new MessageEmbed()
       .setColor("RED")

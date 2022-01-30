@@ -39,8 +39,7 @@ module.exports = {
         .createTogetherCode(channel.id, game)
         .then(async (invite) => {
           return interaction
-            .reply(`${invite.code} <--- Click this invite link to join!`)
-            .catch((err) => {});
+            .reply(`${invite.code} <--- Click this invite link to join!`);
         });
     } else {
       interaction.reply({
