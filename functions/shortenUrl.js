@@ -9,7 +9,7 @@ module.exports = async function shortenUrl(url, slug) {
     },
     json: {
       originalURL: url,
-      domain: `links.pwnker.com`,
+      domain: `0xja.cc`,
       path: slug,
     },
     responseType: "json",
