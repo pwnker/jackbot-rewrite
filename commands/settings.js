@@ -36,6 +36,14 @@ module.exports = {
         .addChannelOption((option) =>
           option.setName("channel").setDescription("The welcome channel.")
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("autorole")
+        .setDescription("Set or veiw the Jackbot join role.")
+        .addRoleOption((option) =>
+          option.setName("role").setDescription("The join role.")
+        )
     ),
 
   async execute(interaction) {
@@ -276,6 +284,57 @@ module.exports = {
       } else {
         interaction.reply({
           content: `Admin role is currently set to <@&${adminRole?.value}>`,
+          ephemeral: true,
+        });
+      }
+    }
+
+    if (interaction.options.getSubcommand() == "autorole") {
+      const role = interaction.options.getRole("role");
+
+      var joinRole = await interaction.client.db.settings.findOne({
+        attributes: ["value"],
+        where: { name: "joinRole", guild: interaction.guild.id },
+      });
+
+      if (joinRole && role) {
+        await interaction.client.db.settings.update(
+          { value: role.id },
+          {
+            where: {
+              name: "joinRole",
+              guild: interaction.guild.id,
+            },
+          }
+        );
+
+        return interaction.reply({
+          content: `Join role set to <@&${role.id}>`,
+          ephemeral: true,
+        });
+      }
+
+      if (role) {
+        await interaction.client.db.settings.create({
+          name: "joinRole",
+          guild: interaction.guild.id,
+          value: role?.id,
+        });
+
+        return interaction.reply({
+          content: `Join role set to <@&${role.id}>`,
+          ephemeral: true,
+        });
+      }
+
+      if (!joinRole) {
+        return interaction.reply({
+          content: `The join role has not been set, only administrators can use commands.`,
+          ephemeral: true,
+        });
+      } else {
+        interaction.reply({
+          content: `The join role is currently set to <@&${joinRole?.value}>`,
           ephemeral: true,
         });
       }

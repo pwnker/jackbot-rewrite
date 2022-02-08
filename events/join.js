@@ -9,10 +9,19 @@ module.exports = {
       where: { name: "welcomeChannel", guild: member.guild.id },
     });
 
+    const joinRole = await member.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "joinRole", guild: member.guild.id },
+    });
+
+    if (joinRole) {
+      await member.roles.add(joinRole.value);
+    }
+
     embed = new MessageEmbed()
       .setTitle("Welcome to the server!")
       .setDescription(
-        `Hey <@${member.id}>, welcome to ${member.guild.name}!`
+        `Hey <@${member.id}>, welcome to **${member.guild.name}**!`
       )
       .setTimestamp()
       .setColor("AQUA")
