@@ -26,7 +26,7 @@ module.exports = {
 
     if (
       !interaction.member.roles.cache.some(
-        (role) => role.id === modRole.value
+        (role) => role.id === modRole?.value
       ) ||
       !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
@@ -41,7 +41,7 @@ module.exports = {
 
     if (
       (user.roles &&
-        user.roles.cache.some((role) => role.id === modRole.value)) ||
+        user.roles.cache.some((role) => role.id === modRole?.value)) ||
       user.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
@@ -62,7 +62,7 @@ module.exports = {
 
     await member.send({ embeds: [dmEmbed] }).catch((err) => {});
 
-    await member.kick({ reason: reason })
+    await member.kick({ reason: reason });
     await interaction.reply({
       content: `<@${user.id}> has been kicked.`,
       ephemeral: true,
@@ -83,6 +83,6 @@ module.exports = {
 
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
-      .send({ embeds: [embed] })
+      .send({ embeds: [embed] });
   },
 };

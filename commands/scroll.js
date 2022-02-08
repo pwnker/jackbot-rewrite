@@ -1,5 +1,10 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, MessageActionRow, MessageButton, Permissions  } = require("discord.js");
+const {
+  MessageEmbed,
+  MessageActionRow,
+  MessageButton,
+  Permissions,
+} = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -14,7 +19,7 @@ module.exports = {
 
     if (
       !interaction.member.roles.cache.some(
-        (role) => role.id === adminRole.value
+        (role) => role.id === adminRole?.value
       ) ||
       !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {

@@ -99,10 +99,10 @@ module.exports = {
         attributes: ["value"],
         where: { name: "modRole", guild: interaction.guild.id },
       });
-  
+
       if (
         !interaction.member.roles.cache.some(
-          (role) => role.id === modRole.value
+          (role) => role.id === modRole?.value
         ) ||
         !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
       ) {
@@ -136,10 +136,10 @@ module.exports = {
         attributes: ["value"],
         where: { name: "adminRole", guild: interaction.guild.id },
       });
-  
+
       if (
         !interaction.member.roles.cache.some(
-          (role) => role.id === adminRole.value
+          (role) => role.id === adminRole?.value
         ) ||
         !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
       ) {
@@ -171,10 +171,10 @@ module.exports = {
         attributes: ["value"],
         where: { name: "adminRole", guild: interaction.guild.id },
       });
-  
+
       if (
         !interaction.member.roles.cache.some(
-          (role) => role.id === adminRole.value
+          (role) => role.id === adminRole?.value
         ) ||
         !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
       ) {
@@ -198,7 +198,9 @@ module.exports = {
       });
       if (tag.content) {
         interaction.reply({
-          content: target ? `*Tag suggestion for <@${target.id}>:*\n ${tag.content}` : tag.content,
+          content: target
+            ? `*Tag suggestion for <@${target.id}>:*\n ${tag.content}`
+            : tag.content,
         });
       } else {
         interaction.reply({

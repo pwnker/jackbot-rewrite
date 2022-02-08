@@ -23,7 +23,7 @@ module.exports = {
 
     if (
       !interaction.member.roles.cache.some(
-        (role) => role.id === modRole.value
+        (role) => role.id === modRole?.value
       ) ||
       !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
@@ -43,7 +43,7 @@ module.exports = {
       });
     }
 
-    await member.timeout(null, reason)
+    await member.timeout(null, reason);
     await interaction.reply({
       content: `Unmuted <@${user.id}>.`,
       ephemeral: true,
@@ -64,7 +64,7 @@ module.exports = {
 
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
-      .send({ embeds: [embed] })
+      .send({ embeds: [embed] });
 
     dmEmbed = new MessageEmbed()
       .setColor("AQUA")

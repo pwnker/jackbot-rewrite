@@ -28,10 +28,10 @@ module.exports = {
 
     if (
       !interaction.member.roles.cache.some(
-        (role) => role.id === modRole.value
+        (role) => role.id === modRole?.value
       ) ||
       !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
-    )  {
+    ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
         ephemeral: true,
@@ -44,7 +44,7 @@ module.exports = {
 
     if (
       (user.roles &&
-        user.roles.cache.some((role) => role.id === modRole.value)) ||
+        user.roles.cache.some((role) => role.id === modRole?.value)) ||
       user.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
@@ -68,7 +68,7 @@ module.exports = {
     var time = parseInt(duration.replace(/[^0-9]/g, ""));
     var multiplyer = units.get(duration.replace(/[0-9]/g, ""));
 
-    await member.timeout(time * multiplyer, reason)
+    await member.timeout(time * multiplyer, reason);
     await interaction.reply({
       content: `<@${user.id}> has been muted for ${duration}`,
       ephemeral: true,
@@ -90,7 +90,7 @@ module.exports = {
 
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
-      .send({ embeds: [embed] })
+      .send({ embeds: [embed] });
 
     dmEmbed = new MessageEmbed()
       .setColor("RED")

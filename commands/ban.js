@@ -30,7 +30,7 @@ module.exports = {
 
     if (
       !interaction.member.roles.cache.some(
-        (role) => role.id === modRole.value
+        (role) => role.id === modRole?.value
       ) ||
       !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
@@ -46,7 +46,7 @@ module.exports = {
 
     if (
       (user.roles &&
-        user.roles.cache.some((role) => role.id === modRole.value)) ||
+        user.roles.cache.some((role) => role.id === modRole?.value)) ||
       user.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({

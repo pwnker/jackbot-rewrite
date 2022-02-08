@@ -23,9 +23,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    if (
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
-    ) {
+    if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
         ephemeral: true,
@@ -39,7 +37,6 @@ module.exports = {
         attributes: ["value"],
         where: { name: "modRole", guild: interaction.guild.id },
       });
-
 
       if (modRole && role) {
         await interaction.client.db.settings.update(
@@ -78,7 +75,7 @@ module.exports = {
         });
       } else {
         interaction.reply({
-          content: `Mod role is currently set to <@&${modRole.value}>`,
+          content: `Mod role is currently set to <@&${modRole?.value}>`,
           ephemeral: true,
         });
       }
@@ -129,7 +126,7 @@ module.exports = {
         });
       } else {
         interaction.reply({
-          content: `Admin role is currently set to <@&${adminRole.value}>`,
+          content: `Admin role is currently set to <@&${adminRole?.value}>`,
           ephemeral: true,
         });
       }
