@@ -188,9 +188,15 @@ module.exports = {
       });
 
       if (!rowCount)
-        return interaction.reply(`The **${name}** tag does not exist.`);
+        return interaction.reply({
+          content: `The **${name}** tag does not exist.`,
+          ephemeral: true,
+        });
 
-      return interaction.reply(`The **${name}** tag has been deleted.`);
+      return interaction.reply({
+        content: `The **${name}** tag has been deleted.`,
+        ephemeral: true,
+      });
     }
     if (interaction.options.getSubcommand() == "send") {
       const tag = await interaction.client.db.tags.findOne({
