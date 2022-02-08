@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton, Permissions } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,10 +15,16 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const adminRole = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "adminRole", guild: interaction.guild.id },
+    });
+
     if (
       !interaction.member.roles.cache.some(
-        (role) => role.id === process.env.ADMIN_ROLE
-      )
+        (role) => role.id === adminRole.value
+      ) ||
+      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",

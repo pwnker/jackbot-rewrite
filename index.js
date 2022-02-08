@@ -1,4 +1,5 @@
 const fs = require("fs");
+const Sequelize = require("sequelize");
 const {
   Client,
   Collection,
@@ -51,15 +52,15 @@ client.on("interactionCreate", async (interaction) => {
         .setColor("RED")
         .setTitle(error.name)
         .setDescription("```" + error.stack + "```")
-        .setTimestamp()
-
+        .setTimestamp();
 
       client.channels.cache
         .get(process.env.BOT_LOG_CHANNEL)
         .send({ embeds: [errorEmbed] });
 
       return interaction.reply({
-        content: "There was an error while executing this command! This error has been reported.",
+        content:
+          "There was an error while executing this command! This error has been reported.",
         ephemeral: true,
       });
     }
@@ -68,13 +69,13 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.isAutocomplete()) {
     if (interaction.commandName == "tag") {
       const focusedValue = interaction.options.getFocused();
-      const choices = [];
-      const tags = await client.db.indexes;
-      tags.forEach((tag) => {
-        if (tag.startsWith("tag-")) {
-          choices.push(tag.replace("tag-", ""));
-        }
+      const tags = await client.db.tags.findAll({
+        attributes: ["name"],
+        where: {
+          guild: interaction.guild.id,
+        },
       });
+      choices = tags.map((t) => t.name);
       const filtered = choices.filter((choice) =>
         choice.startsWith(focusedValue)
       );
@@ -120,15 +121,16 @@ client.on("interactionCreate", async (interaction) => {
   } catch (error) {
     console.error(error);
     errorEmbed = new MessageEmbed()
-        .setColor("RED")
-        .setTitle(error.name)
-        .setDescription("```" + error.stack + "```");
+      .setColor("RED")
+      .setTitle(error.name)
+      .setDescription("```" + error.stack + "```");
 
-      client.channels.cache
-        .get(process.env.BOT_LOG_CHANNEL)
-        .send({ embeds: [errorEmbed] });
+    client.channels.cache
+      .get(process.env.BOT_LOG_CHANNEL)
+      .send({ embeds: [errorEmbed] });
     return interaction.reply({
-      content: "There was an error while using this button! This error has been reported.",
+      content:
+        "There was an error while using this button! This error has been reported.",
       ephemeral: true,
     });
   }
@@ -153,48 +155,87 @@ client.on("interactionCreate", async (interaction) => {
   } catch (error) {
     console.error(error);
     errorEmbed = new MessageEmbed()
-        .setColor("RED")
-        .setTitle(error.name)
-        .setDescription("```" + error.stack + "```");
+      .setColor("RED")
+      .setTitle(error.name)
+      .setDescription("```" + error.stack + "```");
 
-      client.channels.cache
-        .get(process.env.BOT_LOG_CHANNEL)
-        .send({ embeds: [errorEmbed] });
+    client.channels.cache
+      .get(process.env.BOT_LOG_CHANNEL)
+      .send({ embeds: [errorEmbed] });
     return interaction.reply({
-      content: "There was an error while using this menu! This error has been reported.",
+      content:
+        "There was an error while using this menu! This error has been reported.",
       ephemeral: true,
     });
   }
 });
 
 // db
-client.db = new Enmap({ name: "bot" });
+
+client.db = new Sequelize(
+  process.env.PGDATABASE,
+  process.env.PGUSER,
+  process.env.PGPASSWORD,
+  {
+    host: process.env.PGHOST,
+    dialect: "postgres",
+    native: false,
+    logging: true,
+  }
+);
+
+client.db.tags = client.db.define(
+  "tags",
+  {
+    name: {
+      type: Sequelize.STRING,
+    },
+    content: { type: Sequelize.TEXT },
+    guild: { type: Sequelize.BIGINT },
+  },
+
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ["name", "guild"],
+      },
+    ],
+  }
+);
+
+client.db.settings = client.db.define("settings", {
+  name: {
+    type: Sequelize.STRING,
+  },
+  value: Sequelize.BIGINT,
+  guild: {type: Sequelize.BIGINT},
+});
 
 // errors
 
 process.on("unhandledRejection", (error) => {
   console.error("Unhandled promise rejection:", error);
   errorEmbed = new MessageEmbed()
-        .setColor("RED")
-        .setTitle(error.name)
-        .setDescription("```" + error.stack + "```");
+    .setColor("RED")
+    .setTitle(error.name)
+    .setDescription("```" + error.stack + "```");
 
-      client.channels.cache
-        .get(process.env.BOT_LOG_CHANNEL)
-        .send({ embeds: [errorEmbed] });
-
+  client.channels.cache
+    .get(process.env.BOT_LOG_CHANNEL)
+    .send({ embeds: [errorEmbed] });
 });
 
 client.on("shardError", (error) => {
   console.error("A websocket connection encountered an error:", error);
   errorEmbed = new MessageEmbed()
-        .setColor("RED")
-        .setTitle(error.name)
-        .setDescription("```" + error.stack + "```");
+    .setColor("RED")
+    .setTitle(error.name)
+    .setDescription("```" + error.stack + "```");
 
-      client.channels.cache
-        .get(process.env.BOT_LOG_CHANNEL)
-        .send({ embeds: [errorEmbed] });
+  client.channels.cache
+    .get(process.env.BOT_LOG_CHANNEL)
+    .send({ embeds: [errorEmbed] });
 });
 
 client.login(process.env.TOKEN);

@@ -6,7 +6,16 @@ module.exports = {
   name: "ready",
   once: true,
   async execute(client) {
-    client.user.setStatus("dnd");
+    // DB
+
+    try {
+      await client.db.authenticate();
+      console.log('Connection has been established successfully.');
+      await client.db.sync({alter: true});
+    } catch (error) {
+      console.error('Unable to connect to the database:', error);
+    }
+    
 
     response = await octokit.request("GET /repos/{owner}/{repo}/commits", {
       owner: "pwnker",
@@ -37,6 +46,10 @@ module.exports = {
     client.user.setActivity(`${client.guilds.cache.size} servers`, {
       type: "WATCHING",
     });
+
+    // Status
+    client.user.setStatus("dnd");
+
     setInterval(() => {
       client.user.setActivity(`${client.guilds.cache.size} servers`, {
         type: "WATCHING",

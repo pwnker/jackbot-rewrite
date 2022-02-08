@@ -160,3 +160,4 @@ dist
 .DS_Store
 
 .vscode/*
+postgres-data/*

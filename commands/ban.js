@@ -1,7 +1,7 @@
 // Ban a user from the server.
 
 const { SlashCommandBuilder, Embed } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, Permissions } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -23,10 +23,16 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const modRole = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "modRole", guild: interaction.guild.id },
+    });
+
     if (
       !interaction.member.roles.cache.some(
-        (role) => role.id === process.env.MOD_ROLE
-      )
+        (role) => role.id === modRole.value
+      ) ||
+      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -39,8 +45,9 @@ module.exports = {
     purge = interaction.options.getBoolean("purge");
 
     if (
-      user.roles &&
-      user.roles.cache.some((role) => role.id === process.env.MOD_ROLE)
+      (user.roles &&
+        user.roles.cache.some((role) => role.id === modRole.value)) ||
+      user.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
         content: "You cannot ban a moderator.",
@@ -58,13 +65,13 @@ module.exports = {
     await member.send({ embeds: [dmEmbed] }).catch((err) => {});
 
     if (purge) {
-      await member.ban({ reason: reason, days: 7 })
+      await member.ban({ reason: reason, days: 7 });
       interaction.reply({
         content: `<@${user.id}> has been banned and their messages purged.`,
         ephemeral: true,
       });
     } else {
-      await member.ban({ reason: reason })
+      await member.ban({ reason: reason });
       interaction.reply({
         content: `<@${user.id}> has been banned.`,
         ephemeral: true,
@@ -86,6 +93,6 @@ module.exports = {
 
     await interaction.client.channels.cache
       .get(process.env.LOG_CHANNEL)
-      .send({ embeds: [embed] })
+      .send({ embeds: [embed] });
   },
 };

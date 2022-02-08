@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, Permissions } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -10,7 +10,7 @@ module.exports = {
     )
     .addSubcommand((subcommand) =>
       subcommand
-        .setName("view")
+        .setName("send")
         .setDescription("Send a tag to the current channel.")
         .addStringOption((option) =>
           option
@@ -44,6 +44,24 @@ module.exports = {
     )
     .addSubcommand((subcommand) =>
       subcommand
+        .setName("edit")
+        .setDescription("Edit a tag")
+        .addStringOption((option) =>
+          option
+            .setName("name")
+            .setDescription("The name of the tag.")
+            .setAutocomplete(true)
+            .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option
+            .setName("content")
+            .setDescription("The new content for the tag.")
+            .setRequired(true)
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
         .setName("remove")
         .setDescription("Remove a tag")
         .addStringOption((option) =>
@@ -56,18 +74,18 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    tag = interaction.options.getString("name");
-    content = interaction.options.getString("content");
-    target = interaction.options.getUser("user");
+    const name = interaction.options.getString("name");
+    const content = interaction.options.getString("content");
+    const target = interaction.options.getUser("user");
 
     if (interaction.options.getSubcommand() == "list") {
-      const tags = [];
-      await interaction.client.db.indexes.forEach(async (index) => {
-        if (index.startsWith("tag-")) {
-          tags.push(index.split("-")[1]);
-        }
+      const tags = await interaction.client.db.tags.findAll({
+        attributes: ["name"],
+        where: {
+          guild: interaction.guild.id,
+        },
       });
-      string = tags.join(", ");
+      string = tags.map((t) => t.name).join(", ") || "No tags set.";
       const embed = new MessageEmbed()
         .setColor("AQUA")
         .setTitle("Tags")
@@ -77,52 +95,114 @@ module.exports = {
     }
 
     if (interaction.options.getSubcommand() == "create") {
+      const modRole = await interaction.client.db.settings.findOne({
+        attributes: ["value"],
+        where: { name: "modRole", guild: interaction.guild.id },
+      });
+  
       if (
         !interaction.member.roles.cache.some(
-          (role) => role.id === process.env.ADMIN_ROLE
-        )
+          (role) => role.id === modRole.value
+        ) ||
+        !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
       ) {
         return interaction.reply({
           content: "You do not have permission to create a tag.",
           ephemeral: true,
         });
       }
-      await interaction.client.db.set(`tag-${tag}`, content);
+      try {
+        const tag = await interaction.client.db.tags.create({
+          name: name,
+          content: content,
+          guild: interaction.guild.id,
+        });
+
+        return interaction.reply({
+          content: `Tag **${name}** added.`,
+          ephemeral: true,
+        });
+      } catch (error) {
+        if (error.name === "SequelizeUniqueConstraintError") {
+          return interaction.reply({
+            content: `The tag **${name}** already exists. Edit it with \`tag edit\`.`,
+            ephemeral: true,
+          });
+        }
+      }
+    }
+    if (interaction.options.getSubcommand() == "edit") {
+      const adminRole = await interaction.client.db.settings.findOne({
+        attributes: ["value"],
+        where: { name: "adminRole", guild: interaction.guild.id },
+      });
+  
+      if (
+        !interaction.member.roles.cache.some(
+          (role) => role.id === adminRole.value
+        ) ||
+        !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      ) {
+        return interaction.reply({
+          content: "You do not have permission to edit a tag.",
+          ephemeral: true,
+        });
+      }
+
+      const affectedRows = await interaction.client.db.tags.update(
+        { content: content },
+        { where: { name: name } }
+      );
+
+      if (affectedRows > 0) {
+        return interaction.reply({
+          content: `The tag **${name}** has been edited.`,
+          ephemeral: true,
+        });
+      }
+
       return interaction.reply({
-        content: `Created the **${tag}** tag.`,
+        content: `Could not find a tag with name **${name}**.`,
         ephemeral: true,
       });
     }
     if (interaction.options.getSubcommand() == "remove") {
+      const adminRole = await interaction.client.db.settings.findOne({
+        attributes: ["value"],
+        where: { name: "adminRole", guild: interaction.guild.id },
+      });
+  
       if (
         !interaction.member.roles.cache.some(
-          (role) => role.id === process.env.ADMIN_ROLE
-        )
+          (role) => role.id === adminRole.value
+        ) ||
+        !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
       ) {
         return interaction.reply({
           content: "You do not have permission to remove a tag.",
           ephemeral: true,
         });
       }
-      await interaction.client.db.delete(`tag-${tag}`);
-      return interaction.reply({
-        content: `Removed the **${tag}** tag.`,
-        ephemeral: true,
+      const rowCount = await interaction.client.db.tags.destroy({
+        where: { name: name, guild: interaction.guild.id },
       });
+
+      if (!rowCount)
+        return interaction.reply(`The **${name}** tag does not exist.`);
+
+      return interaction.reply(`The **${name}** tag has been deleted.`);
     }
-    if (interaction.options.getSubcommand() == "view") {
-      content = await interaction.client.db.get(`tag-${tag}`);
-      if (content) {
-        interaction.channel.send({
-          content: target ? `<@${target.id}>, ${content}` : content,
-        });
-        await interaction.reply({
-          content: `Sent the **${tag}** tag.`,
-          ephemeral: true,
+    if (interaction.options.getSubcommand() == "send") {
+      const tag = await interaction.client.db.tags.findOne({
+        where: { name: name, guild: interaction.guild.id },
+      });
+      if (tag.content) {
+        interaction.reply({
+          content: target ? `*Tag suggestion for <@${target.id}>:*\n ${tag.content}` : tag.content,
         });
       } else {
         interaction.reply({
-          content: `Tag **${tag}** not found!`,
+          content: `Tag **${name}** not found!`,
           ephemeral: true,
         });
       }
