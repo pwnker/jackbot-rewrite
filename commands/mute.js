@@ -49,9 +49,9 @@ module.exports = {
     var duration = interaction.options.getString("duration") || "28d";
 
     if (
-      (user.roles &&
-        user.roles.cache.some((role) => role.id === modRole?.value)) ||
-      user.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      (member.roles &&
+        member.roles.cache.some((role) => role.id === modRole?.value)) ||
+        member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
         content: "You cannot mute a moderator.",

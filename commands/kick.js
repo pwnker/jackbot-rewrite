@@ -44,11 +44,10 @@ module.exports = {
     user = interaction.options.getUser("user");
     member = await interaction.guild.members.fetch(user);
     reason = interaction.options.getString("reason") || "No Reason";
-
     if (
-      (user.roles &&
-        user.roles.cache.some((role) => role.id === modRole?.value)) ||
-      user.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      (member.roles &&
+        member.roles.cache.some((role) => role.id === modRole?.value)) ||
+      member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
         content: "You cannot kick a moderator.",

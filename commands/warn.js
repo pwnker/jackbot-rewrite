@@ -46,9 +46,9 @@ module.exports = {
     reason = interaction.options.getString("reason") || "No Reason";
 
     if (
-      (user.roles &&
-        user.roles.cache.some((role) => role.id === modRole?.value)) ||
-      user.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      (member.roles &&
+        member.roles.cache.some((role) => role.id === modRole?.value)) ||
+      member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
         content: "You cannot warn a moderator.",
@@ -69,16 +69,16 @@ module.exports = {
       )
       .setTimestamp();
 
-      const logChannel = await interaction.client.db.settings.findOne({
-        attributes: ["value"],
-        where: { name: "logChannel", guild: interaction.guild.id },
-      });
-  
-      if (logChannel) {
-        await interaction.client.channels.cache
-          .get(logChannel.value)
-          .send({ embeds: [confirmation] });
-      }
+    const logChannel = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "logChannel", guild: interaction.guild.id },
+    });
+
+    if (logChannel) {
+      await interaction.client.channels.cache
+        .get(logChannel.value)
+        .send({ embeds: [confirmation] });
+    }
 
     dmEmbed = new MessageEmbed()
       .setColor("RED")

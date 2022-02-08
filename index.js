@@ -46,7 +46,16 @@ client.on("interactionCreate", async (interaction) => {
     try {
       await command.execute(interaction);
     } catch (error) {
+      if (error.code === 50013) {
+        return interaction.reply({
+          content:
+            "Jackbot does not have the correct permissions to run this command.",
+          ephemeral: true,
+        });
+      }
+
       console.error(error);
+
       errorEmbed = new MessageEmbed()
         .setColor("RED")
         .setTitle(error.name)
@@ -208,7 +217,7 @@ client.db.settings = client.db.define("settings", {
     type: Sequelize.STRING,
   },
   value: Sequelize.BIGINT,
-  guild: {type: Sequelize.BIGINT},
+  guild: { type: Sequelize.BIGINT },
 });
 
 // errors
