@@ -4,9 +4,11 @@ module.exports = {
   name: "guildMemberAdd",
   once: false,
   async execute(member) {
-    const channel = member.guild.channels.cache.get(
-      process.env.WELCOME_CHANNEL
-    );
+    const channel = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "welcomeChannel", guild: interaction.guild.id },
+    });
+
     embed = new MessageEmbed()
       .setTitle("Welcome to the server!")
       .setDescription(
@@ -16,6 +18,10 @@ module.exports = {
       .setFooter({ text: `Member #${member.guild.memberCount}` })
       .setThumbnail(member.displayAvatarURL({ dynamic: true }));
 
-    channel.send({ embeds: [embed] }).catch((err) => {});
+    if (channel) {
+      await interaction.client.channels.cache
+        .get(channel.value)
+        .send({ embeds: [embed] });
+    }
   },
 };

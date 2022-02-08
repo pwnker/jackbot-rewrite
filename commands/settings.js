@@ -28,20 +28,96 @@ module.exports = {
         .addChannelOption((option) =>
           option.setName("channel").setDescription("The log channel.")
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("welcome")
+        .setDescription("Set or veiw the Jackbot welcome channel.")
+        .addChannelOption((option) =>
+          option.setName("channel").setDescription("The welcome channel.")
+        )
     ),
 
   async execute(interaction) {
-    if (!interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+    var adminRole = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "adminRole", guild: interaction.guild.id },
+    });
+
+    if (
+      !interaction.member.roles.cache.some(
+        (role) => role.id === adminRole?.value
+      ) ||
+      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+    ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
         ephemeral: true,
       });
     }
 
+    if (interaction.options.getSubcommand() == "welcome") {
+      const channel = interaction.options.getChannel("channel");
+
+      if (channel && !channel.isText()) {
+        return interaction.reply({
+          content: "Welcome channel must be a text channel.",
+          ephemeral: true,
+        });
+      }
+
+      var welcomeChannel = await interaction.client.db.settings.findOne({
+        attributes: ["value"],
+        where: { name: "welcomeChannel", guild: interaction.guild.id },
+      });
+
+      if (welcomeChannel && channel) {
+        await interaction.client.db.settings.update(
+          { value: channel.id },
+          {
+            where: {
+              name: "welcomeChannel",
+              guild: interaction.guild.id,
+            },
+          }
+        );
+
+        return interaction.reply({
+          content: `Welcome channel set to <#${channel.id}>`,
+          ephemeral: true,
+        });
+      }
+
+      if (channel) {
+        await interaction.client.db.settings.create({
+          name: "welcomeChannel",
+          guild: interaction.guild.id,
+          value: channel?.id,
+        });
+
+        return interaction.reply({
+          content: `Welcome channel set to <#${channel.id}>`,
+          ephemeral: true,
+        });
+      }
+
+      if (!welcomeChannel) {
+        return interaction.reply({
+          content: `The welcome channel has not been set. Set it with \`/settings welcome <channel>\``,
+          ephemeral: true,
+        });
+      } else {
+        interaction.reply({
+          content: `The welcome channel is currently set to <#${welcomeChannel?.value}>`,
+          ephemeral: true,
+        });
+      }
+    }
+
     if (interaction.options.getSubcommand() == "logs") {
       const channel = interaction.options.getChannel("channel");
 
-      if (channel && !channel.isText) {
+      if (channel && !channel.isText()) {
         return interaction.reply({
           content: "Log channel must be a text channel.",
           ephemeral: true,
@@ -85,7 +161,7 @@ module.exports = {
 
       if (!logChannel) {
         return interaction.reply({
-          content: `The logging channel has not been set. Set it win \`/settings logs <channel>\``,
+          content: `The logging channel has not been set. Set it with \`/settings logs <channel>\``,
           ephemeral: true,
         });
       } else {
