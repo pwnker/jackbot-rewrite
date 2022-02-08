@@ -39,10 +39,25 @@ module.exports = {
     )
     .addSubcommand((subcommand) =>
       subcommand
-        .setName("autorole")
+        .setName("joinrole")
         .setDescription("Set or veiw the Jackbot join role.")
         .addRoleOption((option) =>
           option.setName("role").setDescription("The join role.")
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("reset")
+        .setDescription("Reset a setting to its default value.")
+        .addStringOption((option) =>
+          option.setName("setting").setDescription("The setting to reset.")
+          .setRequired(true)
+          .addChoice("Moderator Role", "modRole")
+          .addChoice("Admin Role", "adminRole")
+          .addChoice("Log Channel", "logChannel")
+          .addChoice("Welcome Channel", "welcomeChannel")
+          .addChoice("Join Role", "joinRole")
+          .addChoice("All", "all")
         )
     ),
 
@@ -62,7 +77,7 @@ module.exports = {
     if (
       !interaction.member.roles.cache.some(
         (role) => role.id === adminRole?.value
-      ) ||
+      ) &&
       !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
@@ -70,6 +85,31 @@ module.exports = {
         ephemeral: true,
       });
     }
+
+    if (interaction.options.getSubcommand() == "reset") {
+      let setting = interaction.options.getString("setting");
+      if (setting == "all") {
+        await interaction.client.db.settings.destroy({
+          where: { guild: interaction.guild.id },
+        });
+        return await interaction.reply({
+          content: "All settings have been reset.",
+          ephemeral: true,
+        });
+      }
+      await interaction.client.db.settings.destroy({
+        where: { name: setting, guild: interaction.guild.id },
+      });
+      // Make setting human readable with a space between words.
+      setting = setting.replace(/([A-Z])/g, " $1");
+      setting = setting.charAt(0).toUpperCase() + setting.slice(1);
+
+      return await interaction.reply({
+        content: `The **${setting}** setting has been reset.`,
+        ephemeral: true,
+      });
+    }
+
 
     if (interaction.options.getSubcommand() == "welcome") {
       const channel = interaction.options.getChannel("channel");
@@ -289,7 +329,7 @@ module.exports = {
       }
     }
 
-    if (interaction.options.getSubcommand() == "autorole") {
+    if (interaction.options.getSubcommand() == "joinrole") {
       const role = interaction.options.getRole("role");
 
       var joinRole = await interaction.client.db.settings.findOne({

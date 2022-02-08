@@ -34,7 +34,7 @@ module.exports = {
     if (
       !interaction.member.roles.cache.some(
         (role) => role.id === adminRole?.value
-      ) ||
+      ) &&
       !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
     ) {
       return interaction.reply({
