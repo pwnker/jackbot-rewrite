@@ -53,9 +53,9 @@ module.exports = {
         (message) => message.author.id === user.id
       );
     }
-    await interaction.channel.bulkDelete(messages, true);
+    const purged = await interaction.channel.bulkDelete(messages, true);
     await interaction.reply({
-      content: `Purged **${amount}** messages.`,
+      content: `Purged **${purged.size}** messages.`,
       ephemeral: true,
     });
 
@@ -66,7 +66,7 @@ module.exports = {
         text: `Purged by ${interaction.user.username} | ${interaction.user.id}`,
       })
       .addFields(
-        { name: "Amount", value: `${amount}`, inline: true },
+        { name: "Amount", value: `${purged.size}`, inline: true },
         {
           name: "Username",
           value: user ? `<@${user.id}>` : `All users.`,
@@ -77,8 +77,15 @@ module.exports = {
       )
       .setTimestamp();
 
-    await interaction.client.channels.cache
-      .get(process.env.LOG_CHANNEL)
-      .send({ embeds: [confirmation] });
+    const logChannel = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "logChannel", guild: interaction.guild.id },
+    });
+
+    if (logChannel) {
+      await interaction.client.channels.cache
+        .get(logChannel.value)
+        .send({ embeds: [confirmation] });
+    }
   },
 };

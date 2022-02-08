@@ -20,6 +20,14 @@ module.exports = {
         .addRoleOption((option) =>
           option.setName("role").setDescription("The admin role.")
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("logs")
+        .setDescription("Set or veiw the Jackbot Log channel.")
+        .addChannelOption((option) =>
+          option.setName("channel").setDescription("The log channel.")
+        )
     ),
 
   async execute(interaction) {
@@ -28,6 +36,64 @@ module.exports = {
         content: "You do not have permission to use this command.",
         ephemeral: true,
       });
+    }
+
+    if (interaction.options.getSubcommand() == "logs") {
+      const channel = interaction.options.getChannel("channel");
+
+      if (channel && !channel.isText) {
+        return interaction.reply({
+          content: "Log channel must be a text channel.",
+          ephemeral: true,
+        });
+      }
+
+      var logChannel = await interaction.client.db.settings.findOne({
+        attributes: ["value"],
+        where: { name: "logChannel", guild: interaction.guild.id },
+      });
+
+      if (logChannel && channel) {
+        await interaction.client.db.settings.update(
+          { value: channel.id },
+          {
+            where: {
+              name: "logChannel",
+              guild: interaction.guild.id,
+            },
+          }
+        );
+
+        return interaction.reply({
+          content: `Log channel set to <#${channel.id}>`,
+          ephemeral: true,
+        });
+      }
+
+      if (channel) {
+        await interaction.client.db.settings.create({
+          name: "logChannel",
+          guild: interaction.guild.id,
+          value: channel?.id,
+        });
+
+        return interaction.reply({
+          content: `Log channel set to <#${channel.id}>`,
+          ephemeral: true,
+        });
+      }
+
+      if (!logChannel) {
+        return interaction.reply({
+          content: `The logging channel has not been set. Set it win \`/settings logs <channel>\``,
+          ephemeral: true,
+        });
+      } else {
+        interaction.reply({
+          content: `The log channel is currently set to <#${logChannel?.value}>`,
+          ephemeral: true,
+        });
+      }
     }
 
     if (interaction.options.getSubcommand() == "modrole") {

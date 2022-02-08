@@ -179,7 +179,7 @@ client.db = new Sequelize(
     host: process.env.PGHOST,
     dialect: "postgres",
     native: false,
-    logging: true,
+    logging: false,
   }
 );
 

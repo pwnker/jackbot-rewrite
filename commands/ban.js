@@ -78,7 +78,7 @@ module.exports = {
       });
     }
 
-    embed = new MessageEmbed()
+    confirmation = new MessageEmbed()
       .setColor("RED")
       .setTitle("Discord User Banned")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
@@ -91,8 +91,15 @@ module.exports = {
       )
       .setTimestamp();
 
-    await interaction.client.channels.cache
-      .get(process.env.LOG_CHANNEL)
-      .send({ embeds: [embed] });
+      const logChannel = await interaction.client.db.settings.findOne({
+        attributes: ["value"],
+        where: { name: "logChannel", guild: interaction.guild.id },
+      });
+  
+      if (logChannel) {
+        await interaction.client.channels.cache
+          .get(logChannel.value)
+          .send({ embeds: [confirmation] });
+      }
   },
 };
