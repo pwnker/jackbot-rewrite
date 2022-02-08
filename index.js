@@ -10,7 +10,6 @@ const {
 } = require("discord.js");
 const { DiscordTogether } = require("discord-together");
 const dotenv = require("dotenv");
-const Enmap = require("enmap");
 dotenv.config();
 
 const client = new Client({
