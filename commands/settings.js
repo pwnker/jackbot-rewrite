@@ -50,15 +50,20 @@ module.exports = {
         .setName("reset")
         .setDescription("Reset a setting to its default value.")
         .addStringOption((option) =>
-          option.setName("setting").setDescription("The setting to reset.")
-          .setRequired(true)
-          .addChoice("Moderator Role", "modRole")
-          .addChoice("Admin Role", "adminRole")
-          .addChoice("Log Channel", "logChannel")
-          .addChoice("Welcome Channel", "welcomeChannel")
-          .addChoice("Join Role", "joinRole")
-          .addChoice("All", "all")
+          option
+            .setName("setting")
+            .setDescription("The setting to reset.")
+            .setRequired(true)
+            .addChoice("Moderator Role", "modRole")
+            .addChoice("Admin Role", "adminRole")
+            .addChoice("Log Channel", "logChannel")
+            .addChoice("Welcome Channel", "welcomeChannel")
+            .addChoice("Join Role", "joinRole")
+            .addChoice("All", "all")
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand.setName("view").setDescription("View all settings.")
     ),
 
   async execute(interaction) {
@@ -86,6 +91,38 @@ module.exports = {
       });
     }
 
+    if (interaction.options.getSubcommand() == "view") {
+      // lol copilot is a meme.
+      const settings = await interaction.client.db.settings.findAll({
+        attributes: ["name", "value"],
+        where: { guild: interaction.guild.id },
+      });
+
+      var settingsList = settings.map((setting) => {
+        var name = setting.name.replace(/([A-Z])/g, " $1");
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+
+        var value = setting.value;
+        if (setting.name.includes("Role")) {
+          value = `<@&${value}>`;
+        } else if (setting.name.includes("Channel")) {
+          value = `<#${value}>`;
+        }
+
+        return `\`${name}\`: ${value}\n`;
+      });
+
+      const embed = new MessageEmbed()
+        .setColor("AQUA")
+        .setTitle("Settings")
+        .setDescription(`${settingsList.join("") || "No settings set."}`)
+        .setFooter({
+          text: "Use /settings reset <setting> to reset a setting.",
+        });
+
+      return await interaction.reply({ embeds: [embed], ephemeral: true });
+    }
+
     if (interaction.options.getSubcommand() == "reset") {
       let setting = interaction.options.getString("setting");
       if (setting == "all") {
@@ -109,7 +146,6 @@ module.exports = {
         ephemeral: true,
       });
     }
-
 
     if (interaction.options.getSubcommand() == "welcome") {
       const channel = interaction.options.getChannel("channel");
