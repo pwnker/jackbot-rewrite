@@ -74,6 +74,12 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    if (!interaction.guild) {
+      return await interaction.reply({
+        content: "You can only use this command in a server.",
+        ephemeral: true,
+      });
+    }
     const name = interaction.options.getString("name");
     const content = interaction.options.getString("content");
     const target = interaction.options.getUser("user");

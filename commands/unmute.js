@@ -16,6 +16,12 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    if (!interaction.guild) {
+      return await interaction.reply({
+        content: "You can only use this command in a server.",
+        ephemeral: true,
+      });
+    }
     const modRole = await interaction.client.db.settings.findOne({
       attributes: ["value"],
       where: { name: "modRole", guild: interaction.guild.id },
@@ -62,16 +68,16 @@ module.exports = {
       )
       .setTimestamp();
 
-      const logChannel = await interaction.client.db.settings.findOne({
-        attributes: ["value"],
-        where: { name: "logChannel", guild: interaction.guild.id },
-      });
-  
-      if (logChannel) {
-        await interaction.client.channels.cache
-          .get(logChannel.value)
-          .send({ embeds: [confirmation] });
-      }
+    const logChannel = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "logChannel", guild: interaction.guild.id },
+    });
+
+    if (logChannel) {
+      await interaction.client.channels.cache
+        .get(logChannel.value)
+        .send({ embeds: [confirmation] });
+    }
 
     dmEmbed = new MessageEmbed()
       .setColor("AQUA")

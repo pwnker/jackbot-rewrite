@@ -20,6 +20,12 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    if (!interaction.guild) {
+      return await interaction.reply({
+        content: "You can only use this command in a server.",
+        ephemeral: true,
+      });
+    }
     const adminRole = await interaction.client.db.settings.findOne({
       attributes: ["value"],
       where: { name: "adminRole", guild: interaction.guild.id },

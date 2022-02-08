@@ -32,6 +32,13 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    if (!interaction.guild) {
+      return await interaction.reply({
+        content: "You can only use this command in a server.",
+        ephemeral: true,
+      });
+    }
+
     const game = interaction.options.getString("game");
     const channel = interaction.options.getChannel("channel");
     if (channel.type == "GUILD_VOICE") {
