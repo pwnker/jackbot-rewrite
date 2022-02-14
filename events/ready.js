@@ -33,9 +33,10 @@ module.exports = {
           name: "Commit",
           value: `[${response.data[0].commit.message}](${response.data[0].html_url})`,
         },
-        { name: "Author", value: `[${response.data[0].commit.author.name}](${response.data[0].commit.author.html_url})` }
+        { name: "Author", value: `${response.data[0].commit.author.name}` }
       )
       .setTimestamp()
+      .setFooter({text: ${response.data[0].commit.author.email}`})
       .setColor("AQUA");
 
     client.channels.cache
