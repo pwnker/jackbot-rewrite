@@ -15,7 +15,7 @@ module.exports = {
     }
     const embed = new MessageEmbed()
       .setTitle(interaction.guild.name)
-      .setColor("GREEN")
+      .setColor("AQUA")
       .setThumbnail(interaction.guild.iconURL())
       .addFields(
         {
