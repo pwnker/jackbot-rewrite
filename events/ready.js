@@ -33,7 +33,7 @@ module.exports = {
           name: "Commit",
           value: `[${response.data[0].commit.message}](${response.data[0].html_url})`,
         },
-        { name: "Author", value: `${response.data[0].commit.author.name}` }
+        { name: "Author", value: `[${response.data[0].commit.author.name}](${response.data[0].commit.author.html_url})` }
       )
       .setTimestamp()
       .setColor("AQUA");
