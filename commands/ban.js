@@ -1,6 +1,6 @@
 // Ban a user from the server.
 
-const { SlashCommandBuilder, Embed } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed, Permissions } = require("discord.js");
 
 module.exports = {
