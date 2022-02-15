@@ -89,7 +89,7 @@ client.on("interactionCreate", async (interaction) => {
     const filtered = choices.filter(
       (choice) =>
         choice.startsWith(focusedValue) ||
-        choice.startsWith(focusedValue.toLowerCase())
+        choice.toLowerCase().startsWith(focusedValue)
     );
     interaction
       .respond(filtered.map((choice) => ({ name: choice, value: choice })))
