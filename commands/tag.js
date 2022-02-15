@@ -208,7 +208,7 @@ module.exports = {
       const tag = await interaction.client.db.tags.findOne({
         where: { name: name, guild: interaction.guild.id },
       });
-      if (tag.content) {
+      if (tag) {
         interaction.reply({
           content: target
             ? `*Tag suggestion for <@${target.id}>:*\n ${tag.content}`
