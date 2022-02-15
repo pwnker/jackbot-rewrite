@@ -76,21 +76,23 @@ client.on("interactionCreate", async (interaction) => {
 
   if (interaction.isAutocomplete()) {
     if (interaction.commandName == "tag") {
-      const focusedValue = interaction.options.getFocused();
-      const tags = await client.db.tags.findAll({
+      var options = await client.db.tags.findAll({
         attributes: ["name"],
         where: {
           guild: interaction.guild.id,
         },
       });
-      choices = tags.map((t) => t.name);
-      const filtered = choices.filter((choice) =>
-        choice.startsWith(focusedValue)
-      );
-      interaction
-        .respond(filtered.map((choice) => ({ name: choice, value: choice })))
-        .catch(console.error);
     }
+    const focusedValue = interaction.options.getFocused();
+    choices = options.map((o) => o.name);
+    const filtered = choices.filter(
+      (choice) =>
+        choice.startsWith(focusedValue) ||
+        choice.startsWith(focusedValue.toLowerCase())
+    );
+    interaction
+      .respond(filtered.map((choice) => ({ name: choice, value: choice })))
+      .catch(console.error);
   }
 });
 
