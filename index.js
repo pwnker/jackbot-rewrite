@@ -75,6 +75,7 @@ client.on("interactionCreate", async (interaction) => {
   }
 
   if (interaction.isAutocomplete()) {
+    if (!interaction.guild) return;
     if (interaction.commandName == "tag") {
       var options = await client.db.tags.findAll({
         attributes: ["name"],
