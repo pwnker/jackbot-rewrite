@@ -9,6 +9,7 @@ const {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("panel")
+    .setDefaultPermission(false)
     .setDescription("create a support pannel!")
     .addStringOption((option) =>
       option
