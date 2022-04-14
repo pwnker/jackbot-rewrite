@@ -36,7 +36,7 @@ module.exports = {
       searchEngine: searchMode ? searchMode : 0,
     });
     if (!searchResult || !searchResult.tracks.length)
-      return void interaction.followUp({ content: "No results were found!" });
+      return interaction.followUp({ content: "No results were found!" });
 
     const queue = await interaction.client.player.createQueue(guild, {
       ytdlOptions: {
@@ -55,8 +55,8 @@ module.exports = {
     try {
       if (!queue.connection) await queue.connect(member.voice.channel);
     } catch {
-      void client.player.deleteQueue(interaction.guildID);
-      return void interaction.followUp({
+      client.player.deleteQueue(interaction.guildID);
+      return interaction.followUp({
         content: "Could not join your voice channel!",
       });
     }

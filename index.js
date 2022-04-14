@@ -45,6 +45,13 @@ client.on("interactionCreate", async (interaction) => {
 
     if (!command) return;
 
+    if (!interaction.guild) {
+      return await interaction.reply({
+        content: "You can only use this command in a server.",
+        ephemeral: true,
+      });
+    }
+
     try {
       await command.execute(interaction);
     } catch (error) {
