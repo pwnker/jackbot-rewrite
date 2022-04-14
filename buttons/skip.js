@@ -14,6 +14,8 @@ module.exports = {
         ephemeral: true,
       });
     }
+
+    const queue = interaction.client.player.getQueue(interaction.guildId);
     
     if (!queue || !queue.playing) {
       return await interaction.reply({
@@ -22,7 +24,7 @@ module.exports = {
       });
     }
 
-    const queue = interaction.client.player.getQueue(interaction.guildId);
+   
     if (queue.votes.includes(interaction.member.id)) {
       return interaction.reply({
         content: "You already voted to skip this song.",
