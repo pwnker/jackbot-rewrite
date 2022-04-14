@@ -62,8 +62,8 @@ module.exports = {
     }
 
     await interaction.followUp({
-      content: `⏱ | Loading your ${
-        searchResult.playlist ? "playlist" : "track"
+      content: `⏱ | Loading ${
+        searchResult.playlist ? searchResult.playlist.title : searchResult.tracks[0].title + " by " + searchResult.tracks[0].author
       }...`,
     });
     searchResult.playlist
