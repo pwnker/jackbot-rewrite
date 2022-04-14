@@ -14,6 +14,13 @@ module.exports = {
         ephemeral: true,
       });
     }
+    
+    if (!queue || !queue.playing) {
+      return await interaction.reply({
+        content: "No music is being played.",
+        ephemeral: true,
+      });
+    }
 
     const queue = interaction.client.player.getQueue(interaction.guildId);
     if (queue.votes.includes(interaction.member.id)) {
