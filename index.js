@@ -1,5 +1,6 @@
 const fs = require("fs");
 const Sequelize = require("sequelize");
+const { Player } = require("discord-player");
 const {
   Client,
   Collection,
@@ -19,6 +20,7 @@ const client = new Client({
     Intents.FLAGS.GUILD_INVITES,
     Intents.FLAGS.GUILD_MESSAGES,
     Intents.FLAGS.DIRECT_MESSAGES,
+    Intents.FLAGS.GUILD_VOICE_STATES,
   ],
 });
 
@@ -239,6 +241,93 @@ process.on("unhandledRejection", (error) => {
 
 client.on("shardError", (error) => {
   console.error("A websocket connection encountered an error:", error);
+  errorEmbed = new MessageEmbed()
+    .setColor("RED")
+    .setTitle(error.name)
+    .setDescription("```" + error.stack + "```");
+
+  client.channels.cache
+    .get(process.env.BOT_LOG_CHANNEL)
+    .send({ embeds: [errorEmbed] });
+});
+
+// Music
+client.player = new Player(client);
+
+musicEmbed = new MessageEmbed().setColor("GREEN");
+
+musicRow = new MessageActionRow().addComponents(
+  new MessageButton()
+    .setCustomId("playPause")
+    .setLabel("⏯️")
+    .setStyle("PRIMARY"),
+  new MessageButton().setCustomId("skip").setLabel("⏭️").setStyle("DANGER")
+);
+
+client.player.on("trackStart", (queue, track) => {
+  musicEmbed.setTitle(`Now playing: ${track.title}`);
+  musicEmbed.setFooter({
+    text: `Requested by: ${track.requestedBy.username} | ${track.source}`,
+  });
+  musicEmbed.setThumbnail(track.thumbnail);
+  musicEmbed.setDescription(
+    `[${track.title}](${track.url}) by ${track.author}`
+  );
+
+  musicRow = new MessageActionRow().addComponents(
+    new MessageButton()
+      .setCustomId("playPause")
+      .setEmoji("⏯️")
+      .setStyle("SECONDARY"),
+    new MessageButton()
+      .setCustomId("skip")
+      .setEmoji(`⏭️`)
+      .setStyle("SECONDARY"),
+    new MessageButton()
+      .setCustomId("volup")
+      .setEmoji("🔊")
+      .setStyle("SECONDARY"),
+    new MessageButton()
+      .setCustomId("voldown")
+      .setEmoji("🔈")
+      .setStyle("SECONDARY")
+  );
+
+  queue.metadata.send({ embeds: [musicEmbed], components: [musicRow] });
+});
+
+client.player.on("trackAdd", (queue, track) => {
+  queue.metadata.send(`🎶 | Track **${track.title}** queued!`);
+});
+
+client.player.on("botDisconnect", (queue) => {
+  queue.metadata.send(
+    "❌ | I was manually disconnected from the voice channel, clearing queue!"
+  );
+});
+
+client.player.on("channelEmpty", (queue) => {
+  queue.metadata.send("❌ | Nobody is in the voice channel, leaving...");
+});
+
+client.player.on("queueEnd", (queue) => {
+  queue.metadata.send("✅ | Queue finished, see you later!");
+});
+
+client.player.on("error", (queue, error) => {
+  console.log(error);
+  errorEmbed = new MessageEmbed()
+    .setColor("RED")
+    .setTitle(error.name)
+    .setDescription("```" + error.stack + "```");
+
+  client.channels.cache
+    .get(process.env.BOT_LOG_CHANNEL)
+    .send({ embeds: [errorEmbed] });
+});
+
+client.player.on("connectionError", (queue, error) => {
+  console.log(error);
   errorEmbed = new MessageEmbed()
     .setColor("RED")
     .setTitle(error.name)
