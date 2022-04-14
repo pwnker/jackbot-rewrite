@@ -304,7 +304,7 @@ client.player.on("trackStart", (queue, track) => {
 });
 
 client.player.on("trackAdd", (queue, track) => {
-  queue.metadata.send(`🎶 | Track **${track.title}** queued!`);
+  queue.metadata.send(`🎶 | **${track.title}** queued!`);
 });
 
 client.player.on("botDisconnect", (queue) => {
