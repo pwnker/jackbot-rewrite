@@ -297,7 +297,8 @@ client.player.on("trackStart", (queue, track) => {
     new MessageButton()
       .setCustomId("voldown")
       .setEmoji("🔈")
-      .setStyle("SECONDARY")
+      .setStyle("SECONDARY"),
+    new MessageButton().setCustomId("clear").setEmoji("🗑️").setStyle("DANGER")
   );
 
   queue.metadata.send({ embeds: [musicEmbed], components: [musicRow] });
