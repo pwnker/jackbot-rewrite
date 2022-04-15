@@ -13,7 +13,7 @@ module.exports = {
     if (!queue)
       return interaction.reply({
         content: "❌ | There are no songs in the queue.",
-        ephmeral: true,
+        ephemeral: true,
       });
     const modRole = await interaction.client.db.settings.findOne({
       attributes: ["value"],
