@@ -44,7 +44,7 @@ module.exports = {
       .send({ embeds: [embed] });
 
     console.log(`Ready! Logged in as ${client.user.tag}`);
-    client.user.setActivity(`${client.guilds.cache.size} servers`, {
+    client.user.setActivity(`blog.pwnker.com`, {
       type: "WATCHING",
     });
 
