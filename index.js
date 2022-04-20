@@ -293,11 +293,13 @@ client.player.on("trackStart", (queue, track) => {
     new MessageButton()
       .setCustomId("volup")
       .setEmoji("🔊")
-      .setStyle("SECONDARY"),
+      .setStyle("SECONDARY")
+      .setDisabled(true),
     new MessageButton()
       .setCustomId("voldown")
       .setEmoji("🔈")
-      .setStyle("SECONDARY"),
+      .setStyle("SECONDARY")
+      .setDisabled(true),
     new MessageButton().setCustomId("clear").setEmoji("🗑️").setStyle("DANGER")
   );
 
