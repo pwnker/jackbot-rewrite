@@ -21,32 +21,26 @@ module.exports = {
         {
           name: "Owner",
           value: `<@${interaction.guild.ownerId}>`,
-          inline: true,
         },
         {
           name: "Members",
           value: `${interaction.guild.memberCount}`,
-          inline: true,
         },
         {
           name: "Channels",
           value: `${interaction.guild.channels.cache.size}`,
-          inline: true,
         },
         {
           name: "Roles",
           value: `${interaction.guild.roles.cache.size}`,
-          inline: true,
         },
         {
           name: "Emoji",
           value: `${interaction.guild.emojis.cache.size}`,
-          inline: true,
         },
         {
           name: "Created",
           value: Formatters.time(interaction.guild.createdAt, "R"),
-          inline: true,
         }
       )
       .setFooter({text: `ID: ${interaction.guild.id}`});
