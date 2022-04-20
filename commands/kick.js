@@ -14,7 +14,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("reason")
-        .setDescription("Reason for banning the user.")
+        .setDescription("Reason for kicking the user.")
         .setRequired(true)
     ),
 
