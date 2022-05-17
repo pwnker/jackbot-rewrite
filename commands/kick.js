@@ -15,7 +15,6 @@ module.exports = {
       option
         .setName("reason")
         .setDescription("Reason for kicking the user.")
-        .setRequired(true)
     ),
 
   async execute(interaction) {
