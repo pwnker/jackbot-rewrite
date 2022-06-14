@@ -7,7 +7,7 @@ services:
       - db
     environment:
       PGUSER: bot
-      PGPASSWORD: 
+      PGPASSWORD: lol
       PGDATABASE: bot
       PGHOST: db
       TOKEN: 
