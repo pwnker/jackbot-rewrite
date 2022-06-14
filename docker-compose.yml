@@ -11,7 +11,6 @@ services:
       PGDATABASE: bot
       PGHOST: db
       TOKEN: 
-      SHORTIO_KEY: 
       CLIENT_ID: 936735120906412113
       GUILD_ID: 
       BOT_LOG_CHANNEL:

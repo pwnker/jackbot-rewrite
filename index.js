@@ -9,7 +9,6 @@ const {
   MessageActionRow,
   MessageButton,
 } = require("discord.js");
-const { DiscordTogether } = require("discord-together");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -24,7 +23,6 @@ const client = new Client({
   ],
 });
 
-client.discordTogether = new DiscordTogether(client);
 client.commands = new Collection();
 client.buttons = new Collection();
 client.menus = new Collection();
