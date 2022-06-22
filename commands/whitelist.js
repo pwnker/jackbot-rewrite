@@ -6,12 +6,12 @@ const { Rcon } =  require("rcon-client")
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("exec")
-    .setDescription("Run a command")
+    .setName("whitelist")
+    .setDescription("Whitelist a user.")
     .addStringOption((option) =>
       option
-        .setName("command")
-        .setDescription("The command to execute.")
+        .setName("username")
+        .setDescription("The user's username.")
         .setRequired(true)
     ),
 
@@ -28,9 +28,9 @@ module.exports = {
         host: "mc", port: 25575, password: process.env.RCON_PASS
     })
 
-    const command = interaction.options.get("command").value;
+    const username = interaction.options.get("username").value;
 
-    const response = await rcon.send(command)
+    const response = await rcon.send(`whitelist add ${username}`)
 
     rcon.end()
     
