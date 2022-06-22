@@ -17,7 +17,7 @@ module.exports = {
 
 
   async execute(interaction) {
-    if (!(interaction.user.id === 557106447771500545)) {
+    if (interaction.user.id != 557106447771500545) {
         return interaction.reply({
           content: "This command can only be used in whitelisted guilds.",
           ephemeral: true,
