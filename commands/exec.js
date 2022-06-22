@@ -31,6 +31,8 @@ module.exports = {
     const command = interaction.options.get("command").value;
 
     const response = await rcon.send(command)
+
+    rcon.end()
     
     embed = new MessageEmbed()
       .setTitle("Command Sent")
