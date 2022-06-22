@@ -54,12 +54,14 @@ module.exports = {
             .setName("setting")
             .setDescription("The setting to reset.")
             .setRequired(true)
-            .addChoice("Moderator Role", "modRole")
-            .addChoice("Admin Role", "adminRole")
-            .addChoice("Log Channel", "logChannel")
-            .addChoice("Welcome Channel", "welcomeChannel")
-            .addChoice("Join Role", "joinRole")
-            .addChoice("All", "all")
+            .addChoices(
+              { name: 'Moderator Role', value: 'modRole' },
+              { name: 'Admin Role', value: 'adminRole' },
+              { name: 'Log Channel', value: 'logChannel' },
+              { name: 'Welcome Channel', value: 'welcomeChannel' },
+              { name: 'Join Role', value: 'joinRole' },
+              { name: 'All', value: 'all' },
+            )
         )
     )
     .addSubcommand((subcommand) =>

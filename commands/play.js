@@ -12,8 +12,10 @@ module.exports = {
     option
       .setName("search-type")
       .setDescription("The type of search to use.")
-      .addChoice("YouTube", "0")
-      .addChoice("SoundCloud", "3")
+      .addChoices(
+        { name: 'YouTube', value: '0' },
+        { name: 'SoundCloud', value: '3' },
+      )
   ),
 
 

@@ -16,8 +16,10 @@ module.exports = {
         .setName("panel")
         .setDescription("The name of the panel.")
         .setRequired(true)
-        .addChoice("Support Panel", "support")
-        .addChoice("Button Role Panel", "roles")
+        .addChoices(
+          { name: 'Support Panel', value: 'support' },
+          { name: 'Button Role Panel', value: 'roles' },
+        )
     ),
 
   async execute(interaction) {
