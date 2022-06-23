@@ -50,11 +50,5 @@ module.exports = {
 
     // Status
     client.user.setStatus("dnd");
-
-    setInterval(() => {
-      client.user.setActivity(`blog.pwnker.com`, {
-        type: "WATCHING",
-      });
-    }, 10800000);
   },
 };
