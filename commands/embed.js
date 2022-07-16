@@ -115,13 +115,21 @@ module.exports = {
                 }
             }
 
+            if (interaction.options.get("url")) {
+                try {
+                    url = new URL(interaction.options.getString("url"));
+                } catch (error) {
+                    return await interaction.editReply({ content: "Invalid url! Make sure to include `http://` or `https://`." })
+                }
+                embed.setURL(url)
+            }
+
             interaction.options.get("title") ? embed.setTitle(interaction.options.getString("title")) : null;
             interaction.options.get("description") ? embed.setDescription(interaction.options.getString("description")) : null;
             interaction.options.get("footer") ? embed.setFooter({ text: interaction.options.getString("footer") }) : null;
             interaction.options.get("image") ? embed.setImage(interaction.options.getAttachment("image").url) : null;
             interaction.options.get("small-image") ? embed.setThumbnail(interaction.options.getAttachment("small-image").url) : null;
-            interaction.options.get("timestamp") ? embed.setTimestamp() : null;
-            interaction.options.get("url") ? embed.setURL(interaction.options.getString("url")) : null;
+            interaction.options.getBoolean("timestamp") ? embed.setTimestamp() : null
 
             await webhook.send({
                 embeds: [embed],
