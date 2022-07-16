@@ -61,6 +61,13 @@ module.exports = {
                 .setDescription(
                     "Send up to 10 messages from JSON as described here: http://0xja.cc/webhooks."
                 )
+        )
+        .addStringOption((option) =>
+            option
+                .setName("fields")
+                .setDescription(
+                    'Add fields separated by commas (and spaces) in the format `name:value`.'
+                )
         ),
 
     async execute(interaction) {
@@ -100,7 +107,7 @@ module.exports = {
             } catch (error) {
                 await webhook.delete();
                 return await interaction.editReply({
-                    content: "Json parse error! Please try again.",
+                    content: "JSON parse error! Please try again.",
                 });
             }
 
@@ -126,6 +133,23 @@ module.exports = {
                 embed.setURL(url)
             }
 
+            if (interaction.options.get("fields")) {
+                var jsonArray = []
+                var optionArray = interaction.options.getString("fields").split(", ")
+
+                optionArray.forEach(e => {
+                    var arr = e.split(":");
+                    jsonArray.push({"name": arr[0], "value": arr[1]})
+                });
+                
+                try {
+                embed.addFields(jsonArray)
+                } catch (error) {
+                    await webhook.delete();
+                    return await interaction.editReply({ content: "Field parse error! Please try again using the format `name:value`." })
+                }
+
+            }
 
             interaction.options.get("title") ? embed.setTitle(interaction.options.getString("title")) : null;
             interaction.options.get("description") ? embed.setDescription(interaction.options.getString("description")) : null;
