@@ -162,3 +162,4 @@ dist
 .vscode/*
 postgres-data/*
 dev/*
+.prettierrc
