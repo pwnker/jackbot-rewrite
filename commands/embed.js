@@ -66,22 +66,22 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
-        // const modRole = await interaction.client.db.settings.findOne({
-        //     attributes: ["value"],
-        //     where: { name: "modRole", guild: interaction.guild.id },
-        // });
+        const modRole = await interaction.client.db.settings.findOne({
+            attributes: ["value"],
+            where: { name: "modRole", guild: interaction.guild.id },
+        });
 
-        // if (
-        //     !interaction.member.roles.cache.some(
-        //         (role) => role.id === modRole?.value
-        //     ) &&
-        //     !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
-        // ) {
-        //     return interaction.editReply({
-        //         content: "You do not have permission to use this command.",
-        //         ephemeral: true,
-        //     });
-        // }
+        if (
+            !interaction.member.roles.cache.some(
+                (role) => role.id === modRole?.value
+            ) &&
+            !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+        ) {
+            return interaction.editReply({
+                content: "You do not have permission to use this command.",
+                ephemeral: true,
+            });
+        }
 
         const username = interaction.options.getString("username");
         const avatar = interaction.options.getAttachment("avatar")?.url;
@@ -111,6 +111,7 @@ module.exports = {
                 try {
                     embed.setColor(interaction.options.getString("color"))
                 } catch (error) {
+                    await webhook.delete();
                     return await interaction.editReply({ content: "Invalid color! Please try again using a number or name in capitals." })
                 }
             }
@@ -119,10 +120,12 @@ module.exports = {
                 try {
                     url = new URL(interaction.options.getString("url"));
                 } catch (error) {
+                    await webhook.delete();
                     return await interaction.editReply({ content: "Invalid url! Make sure to include `http://` or `https://`." })
                 }
                 embed.setURL(url)
             }
+
 
             interaction.options.get("title") ? embed.setTitle(interaction.options.getString("title")) : null;
             interaction.options.get("description") ? embed.setDescription(interaction.options.getString("description")) : null;
@@ -138,5 +141,5 @@ module.exports = {
         await webhook.delete();
 
         await interaction.editReply({ content: "Embed sent!" });
-    },
+    }
 };
