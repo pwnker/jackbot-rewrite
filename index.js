@@ -52,11 +52,12 @@ client.on("interactionCreate", async (interaction) => {
       await command.execute(interaction);
     } catch (error) {
       if (error.code === 50013) {
-        return interaction.reply({
-          content:
-            "Jackbot does not have the correct permissions to run this command.",
-          ephemeral: true,
-        });
+        var errorMsg = "Jackbot does not have the correct permissions to run this command."
+        if (interaction.deferred) {
+          return interaction.editReply(errorMsg);
+        } else {
+          return interaction.reply(errorMsg);
+        }
       }
 
       console.error(error);
@@ -71,11 +72,17 @@ client.on("interactionCreate", async (interaction) => {
         .get(process.env.BOT_LOG_CHANNEL)
         .send({ embeds: [errorEmbed] });
 
-      return interaction.reply({
+      var errorMsg = {
         content:
           "There was an error while executing this command! This error has been reported.",
         ephemeral: true,
-      });
+      }
+
+      if (interaction.deferred) {
+        return interaction.editReply(errorMsg);
+      } else {
+        return interaction.reply(errorMsg);
+      }
     }
   }
 
@@ -144,11 +151,17 @@ client.on("interactionCreate", async (interaction) => {
     client.channels.cache
       .get(process.env.BOT_LOG_CHANNEL)
       .send({ embeds: [errorEmbed] });
-    return interaction.reply({
+    var errorMsg = {
       content:
-        "There was an error while using this button! This error has been reported.",
+        "There was an error while executing this command! This error has been reported.",
       ephemeral: true,
-    });
+    }
+
+    if (interaction.deferred) {
+      return interaction.editReply(errorMsg);
+    } else {
+      return interaction.reply(errorMsg);
+    }
   }
 });
 
@@ -178,11 +191,17 @@ client.on("interactionCreate", async (interaction) => {
     client.channels.cache
       .get(process.env.BOT_LOG_CHANNEL)
       .send({ embeds: [errorEmbed] });
-    return interaction.reply({
+    var errorMsg = {
       content:
-        "There was an error while using this menu! This error has been reported.",
+        "There was an error while executing this command! This error has been reported.",
       ephemeral: true,
-    });
+    }
+
+    if (interaction.deferred) {
+      return interaction.editReply(errorMsg);
+    } else {
+      return interaction.reply(errorMsg);
+    }
   }
 });
 

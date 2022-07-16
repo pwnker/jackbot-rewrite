@@ -64,7 +64,7 @@ module.exports = {
       .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`)
       .addFields({ name: "Reason", value: reason, inline: true });
 
-    await member.send({ embeds: [dmEmbed] }).catch((err) => {});
+    await member.send({ embeds: [dmEmbed] }).catch((err) => { });
 
     await member.kick({ reason: reason });
     await interaction.reply({
