@@ -305,16 +305,6 @@ client.player.on("trackStart", (queue, track) => {
       .setCustomId("skip")
       .setEmoji(`⏭️`)
       .setStyle("SECONDARY"),
-    new MessageButton()
-      .setCustomId("volup")
-      .setEmoji("🔊")
-      .setStyle("SECONDARY")
-      .setDisabled(true),
-    new MessageButton()
-      .setCustomId("voldown")
-      .setEmoji("🔈")
-      .setStyle("SECONDARY")
-      .setDisabled(true),
     new MessageButton().setCustomId("clear").setEmoji("🗑️").setStyle("DANGER")
   );
 
