@@ -16,7 +16,7 @@ module.exports = {
             .setTitle("Jackbot Stats")
             .setColor("AQUA")
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setFooter({ text: `Watching over ${members} total members.` })
+            .setFooter({ text: `Watching ${members} total members.` })
             .addFields(
                 { name: "Servers", value: `${client.guilds.cache.size}`, inline: true },
                 { name: "Uptime", value: `${Math.floor(client.uptime / 86400000)} Days`, inline: true },
