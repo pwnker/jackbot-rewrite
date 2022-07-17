@@ -17,6 +17,11 @@ module.exports = {
         )
         .addStringOption((option) =>
             option
+                .setName("message")
+                .setDescription("Send a seperate message before the embed.")
+        )
+        .addStringOption((option) =>
+            option
                 .setName("color")
                 .setDescription("The color of the embed.")
         )
@@ -168,13 +173,26 @@ module.exports = {
             interaction.options.get("small-image") ? embed.setThumbnail(interaction.options.getAttachment("small-image").url) : null;
             interaction.options.getBoolean("timestamp") ? embed.setTimestamp() : null
 
-
+            if (interaction.options.get("message")) {
+                if (interaction.options._hoistedOptions.length > 1) {
+                    var req = {
+                        content: interaction.options.getString("message"),
+                        embeds: [embed],
+                    }
+                } else {
+                    var req = {
+                        content: interaction.options.getString("message"),
+                    }
+                }
+            } else {
+                var req = {
+                    embeds: [embed],
+                }
+            }
 
 
             try {
-                await webhook.send({
-                    embeds: [embed],
-                });
+                await webhook.send(req);
             } catch (error) {
                 await webhook.delete();
                 return await interaction.editReply({ content: "Invalid embed! Please try again using a different structure." })
