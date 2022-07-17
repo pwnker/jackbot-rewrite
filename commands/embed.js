@@ -116,7 +116,12 @@ module.exports = {
                 });
             }
 
-            await webhook.send(json);
+            try {
+                await webhook.send(json);
+            } catch (error) {
+                await webhook.delete();
+                return await interaction.editReply({ content: "Invalid embed! Please try again using a different structure." })
+            }
         } else {
             const embed = new MessageEmbed();
             if (interaction.options.get("color")) {
@@ -144,11 +149,11 @@ module.exports = {
 
                 optionArray.forEach(e => {
                     var arr = e.split(":");
-                    jsonArray.push({"name": arr[0], "value": arr[1], "inline": interaction.options.getBoolean("inline-fields") ? true : false })
+                    jsonArray.push({ "name": arr[0], "value": arr[1], "inline": interaction.options.getBoolean("inline-fields") ? true : false })
                 });
-                
+
                 try {
-                embed.addFields(jsonArray)
+                    embed.addFields(jsonArray)
                 } catch (error) {
                     await webhook.delete();
                     return await interaction.editReply({ content: "Field parse error! Please try again using the format `name:value`." })
@@ -163,12 +168,20 @@ module.exports = {
             interaction.options.get("small-image") ? embed.setThumbnail(interaction.options.getAttachment("small-image").url) : null;
             interaction.options.getBoolean("timestamp") ? embed.setTimestamp() : null
 
-            await webhook.send({
-                embeds: [embed],
-            });
-        }
-        await webhook.delete();
 
+
+
+            try {
+                await webhook.send({
+                    embeds: [embed],
+                });
+            } catch (error) {
+                await webhook.delete();
+                return await interaction.editReply({ content: "Invalid embed! Please try again using a different structure." })
+            }
+        }
+
+        await webhook.delete();
         await interaction.editReply({ content: "Embed sent!" });
     }
 };
