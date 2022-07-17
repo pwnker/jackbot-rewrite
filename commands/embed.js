@@ -23,7 +23,7 @@ module.exports = {
         .addStringOption((option) =>
             option
                 .setName("color")
-                .setDescription("The color of the embed.")
+                .setDescription("The color of the embed in HEX or name in CAPS. Pass \"INVIS\" to create an embed with no color.")
         )
         .addStringOption((option) =>
             option
@@ -131,7 +131,11 @@ module.exports = {
             const embed = new MessageEmbed();
             if (interaction.options.get("color")) {
                 try {
-                    embed.setColor(interaction.options.getString("color"))
+                    if (interaction.options.getString("color") == "INVIS") {
+                        embed.setColor("2F3136")
+                    } else {
+                        embed.setColor(interaction.options.getString("color"))
+                    }
                 } catch (error) {
                     await webhook.delete();
                     return await interaction.editReply({ content: "Invalid color! Please try again using a number or name in capitals." })
