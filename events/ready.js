@@ -44,9 +44,6 @@ module.exports = {
       .send({ embeds: [embed] });
 
     console.log(`Ready! Logged in as ${client.user.tag}`);
-    client.user.setActivity(`blog.pwnker.com`, {
-      type: "WATCHING",
-    });
 
     // Status
     client.user.setStatus("dnd");
