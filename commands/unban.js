@@ -49,7 +49,7 @@ module.exports = {
 
     confirmation = new MessageEmbed()
       .setColor("AQUA")
-      .setTitle("Discord User Unanned")
+      .setTitle("User Unanned")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({
         text: `Unbanned by ${interaction.user.username} | ${interaction.user.id}`,

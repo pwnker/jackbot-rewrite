@@ -74,7 +74,7 @@ module.exports = {
 
     confirmation = new MessageEmbed()
       .setColor("RED")
-      .setTitle("Discord User Kicked")
+      .setTitle("User Kicked")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({
         text: `Kicked by ${interaction.user.username} | ${interaction.user.id}`,

@@ -82,7 +82,7 @@ module.exports = {
 
     confirmation = new MessageEmbed()
       .setColor("RED")
-      .setTitle("Discord User Muted")
+      .setTitle("User Muted")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({
         text: `Muted by ${interaction.user.username} | ${interaction.user.id}`,

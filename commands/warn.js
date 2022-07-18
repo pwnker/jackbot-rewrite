@@ -58,7 +58,7 @@ module.exports = {
 
     confirmation = new MessageEmbed()
       .setColor("RED")
-      .setTitle("Discord User Warned")
+      .setTitle("User Warned")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({
         text: `Warned by ${interaction.user.username} | ${interaction.user.id}`,
