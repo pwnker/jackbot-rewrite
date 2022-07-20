@@ -131,15 +131,13 @@ module.exports = {
             const embed = new MessageEmbed();
             if (interaction.options.get("color")) {
                 try {
-                    if (interaction.options.getString("color") == "INVIS") {
-                        embed.setColor("2F3136")
-                    } else {
-                        embed.setColor(interaction.options.getString("color"))
-                    }
+                    embed.setColor(interaction.options.getString("color"))
                 } catch (error) {
                     await webhook.delete();
                     return await interaction.editReply({ content: "Invalid color! Please try again using a number or name in capitals." })
                 }
+            } else {
+                embed.setColor("2F3136")
             }
 
             if (interaction.options.get("url")) {
