@@ -77,7 +77,7 @@ module.exports = {
       await interaction.message.edit({
           components: [row],});
         return interaction.followUp({
-          content: `⏭ | Skipped the current song.`,
+          content: `⏭ | Song Skipped.`,
         });
       }
     } else {
@@ -92,7 +92,7 @@ module.exports = {
       await interaction.message.edit({
           components: [row],});
       return interaction.reply({
-        content: `⏭ | Skipped the current song.`,
+        content: `⏭ | Song skipped.`,
       });
     }
   },
