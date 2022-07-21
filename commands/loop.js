@@ -41,7 +41,7 @@ module.exports = {
 
         const loopMode = interaction.options.getInteger("mode");
         const success = queue.setRepeatMode(loopMode);
-        if (loopMode == QueueRepeatMode.AUTOPLAY) {
+        if (loopMode == QueueRepeatMode.AUTOPLAY && success) {
             queue.repeatmode = "ON"
         }
         const mode = loopMode === QueueRepeatMode.TRACK ? '🔂' : loopMode === QueueRepeatMode.QUEUE ? '🔁' : '▶';
