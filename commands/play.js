@@ -39,8 +39,7 @@ module.exports = {
       leaveOnEmptyCooldown: 30000,
       leaveOnEnd: false
     });
-    
-    queue.repeatmode = "OFF"
+ 
     queue.votes = []
 
 

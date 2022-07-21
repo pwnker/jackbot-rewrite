@@ -292,7 +292,7 @@ musicRow = new ActionRowBuilder().addComponents(
 client.player.on("trackStart", (queue, track) => {
   musicEmbed.setTitle(`Now playing: ${track.title}`);
   musicEmbed.setFooter({
-    text: `Requested by: ${track.requestedBy.username} | ${track.source} | Autoplay: ${queue.repeatmode}`,
+    text: `Requested by: ${track.requestedBy.username} | ${track.source}`,
   });
   musicEmbed.setThumbnail(track.thumbnail);
   musicEmbed.setDescription(
