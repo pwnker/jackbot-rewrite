@@ -1,8 +1,15 @@
-const { Permissions } = require("discord.js");
+const { PermissionsBitField } = require("discord.js");
 module.exports = {
   customId: "clear",
   async execute(interaction) {
     const queue = interaction.client.player.getQueue(interaction.guild.id);
+
+    if (!interaction.member.voice.channel) {
+      return interaction.reply({
+        content: "You must be in a voice channel to skip a song.",
+        ephemeral: true,
+      });
+    }
 
     if (!queue)
       return interaction.reply({
@@ -19,7 +26,7 @@ module.exports = {
       (interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) ||
-        interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR))
+        interaction.member.permissions.has(PermissionsBitField.Flags.Administrator))
     ) {
       queue.clear();
       return interaction.reply({

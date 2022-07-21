@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,8 +13,8 @@ module.exports = {
         content: "❌ | No music is being played!",
       });
 
-      await queue.shuffle();
-    
-      await interaction.reply({ content: "✅ | Queue shuffled!" });
+    await queue.shuffle();
+
+    await interaction.reply({ content: "✅ | Queue shuffled!" });
   },
 };

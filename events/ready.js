@@ -1,5 +1,5 @@
 const { Octokit } = require("@octokit/rest");
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 const octokit = new Octokit({});
 module.exports = {
@@ -11,11 +11,11 @@ module.exports = {
     try {
       await client.db.authenticate();
       console.log('Connection has been established successfully.');
-      await client.db.sync({alter: true});
+      await client.db.sync({ alter: true });
     } catch (error) {
       console.error('Unable to connect to the database:', error);
     }
-    
+
 
     response = await octokit.request("GET /repos/{owner}/{repo}/commits", {
       owner: "pwnker",
@@ -23,7 +23,7 @@ module.exports = {
       per_page: 1,
     });
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle("Restarted")
       .setDescription(
         "JackBot has restarted and pulled the latest changes into production."
@@ -36,8 +36,8 @@ module.exports = {
         { name: "Author", value: `${response.data[0].commit.author.name}` }
       )
       .setTimestamp()
-      .setFooter({text: `${response.data[0].commit.author.email}`})
-      .setColor("AQUA");
+      .setFooter({ text: `${response.data[0].commit.author.email}` })
+      .setColor("Aqua");
 
     client.channels.cache
       .get(process.env.BOT_LOG_CHANNEL)

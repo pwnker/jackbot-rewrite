@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -18,13 +18,12 @@ module.exports = {
     const progress = queue.createProgressBar();
     const perc = queue.getPlayerTimestamp();
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle("Now Playing")
-      .setColor("GREEN")
+      .setColor("Green")
       .setThumbnail(queue.current.thumbnail)
       .setDescription(
-        `🎶 | **${queue.current.title}** by **${queue.current.author}** (\`${
-          perc.progress == "Infinity" ? "Live" : perc.progress + "%"
+        `🎶 | **${queue.current.title}** by **${queue.current.author}** (\`${perc.progress == "Infinity" ? "Live" : perc.progress + "%"
         }\`)`
       )
       .addFields({
@@ -32,6 +31,6 @@ module.exports = {
         value: progress.replace(/ 0:00/g, " ◉ LIVE"),
       });
 
-      await interaction.followUp({ embeds: [embed] });
+    await interaction.followUp({ embeds: [embed] });
   },
 };

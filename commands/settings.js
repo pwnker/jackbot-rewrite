@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -85,7 +85,7 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === adminRole?.value
       ) &&
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -114,8 +114,8 @@ module.exports = {
         return `\`${name}\`: ${value}\n`;
       });
 
-      const embed = new MessageEmbed()
-        .setColor("AQUA")
+      const embed = new EmbedBuilder()
+        .setColor("Aqua")
         .setTitle("Settings")
         .setDescription(`${settingsList.join("") || "No settings set."}`)
         .setFooter({

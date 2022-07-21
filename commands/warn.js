@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, Embed } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
+const { SlashCommandBuilder, Embed } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -34,7 +34,7 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -48,7 +48,7 @@ module.exports = {
     if (
       (member.roles &&
         member.roles.cache.some((role) => role.id === modRole?.value)) ||
-      member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You cannot warn a moderator.",
@@ -56,8 +56,8 @@ module.exports = {
       });
     }
 
-    confirmation = new MessageEmbed()
-      .setColor("RED")
+    confirmation = new EmbedBuilder()
+      .setColor("Red")
       .setTitle("User Warned")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({
@@ -80,8 +80,8 @@ module.exports = {
         .send({ embeds: [confirmation] });
     }
 
-    dmEmbed = new MessageEmbed()
-      .setColor("RED")
+    dmEmbed = new EmbedBuilder()
+      .setColor("Red")
       .setTitle("Warned")
       .setDescription(
         `You have been warned in ${interaction.guild.name}. Please read the rules and be respectful.`
@@ -90,7 +90,7 @@ module.exports = {
       .addFields({ name: "Reason", value: reason, inline: true })
       .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`);
 
-    await member.send({ embeds: [dmEmbed] }).catch((err) => {});
+    await member.send({ embeds: [dmEmbed] }).catch((err) => { });
     await interaction.reply({
       content: `<@${user.id}> has been warned.`,
       ephemeral: true,

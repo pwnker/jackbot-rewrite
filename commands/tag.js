@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -92,8 +92,8 @@ module.exports = {
         },
       });
       string = tags.map((t) => t.name).join(", ") || "No tags set.";
-      const embed = new MessageEmbed()
-        .setColor("AQUA")
+      const embed = new EmbedBuilder()
+        .setColor("Aqua")
         .setTitle("Tags")
         .setDescription(`${string}`)
         .setFooter({ text: "Use /tag view <tag> to view a tag." });
@@ -110,7 +110,7 @@ module.exports = {
         !interaction.member.roles.cache.some(
           (role) => role.id === modRole?.value
         ) &&
-        !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+        !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
       ) {
         return interaction.reply({
           content: "You do not have permission to create a tag.",
@@ -147,7 +147,7 @@ module.exports = {
         !interaction.member.roles.cache.some(
           (role) => role.id === adminRole?.value
         ) ||
-        !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+        !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
       ) {
         return interaction.reply({
           content: "You do not have permission to edit a tag.",
@@ -182,7 +182,7 @@ module.exports = {
         !interaction.member.roles.cache.some(
           (role) => role.id === adminRole?.value
         ) ||
-        !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+        !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
       ) {
         return interaction.reply({
           content: "You do not have permission to remove a tag.",

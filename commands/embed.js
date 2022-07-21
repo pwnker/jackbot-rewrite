@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ module.exports = {
         .addStringOption((option) =>
             option
                 .setName("color")
-                .setDescription("The color of the embed in HEX or name in CAPS. Pass \"INVIS\" to create an embed with no color.")
+                .setDescription("The color of the embed in HEX or name (e.g \"Green\"). Pass \"INVIS\" to create an embed with no color.")
         )
         .addStringOption((option) =>
             option
@@ -92,7 +92,7 @@ module.exports = {
             !interaction.member.roles.cache.some(
                 (role) => role.id === modRole?.value
             ) &&
-            !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+            !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
         ) {
             return interaction.editReply({
                 content: "You do not have permission to use this command.",
@@ -103,8 +103,10 @@ module.exports = {
         const username = interaction.options.getString("username");
         const avatar = interaction.options.getAttachment("avatar")?.url;
         const webhook = await interaction.channel.createWebhook(
-            username ? username : "JackBot",
+
             {
+                name: username ? username : "JackBot",
+
                 avatar: avatar
                     ? avatar
                     : await interaction.client.user.avatarURL({ dynamic: true }),
@@ -128,7 +130,7 @@ module.exports = {
                 return await interaction.editReply({ content: "Invalid embed! Please try again using a different structure." })
             }
         } else {
-            const embed = new MessageEmbed();
+            const embed = new EmbedBuilder();
             if (interaction.options.get("color")) {
                 try {
                     embed.setColor(interaction.options.getString("color"))

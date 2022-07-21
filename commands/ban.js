@@ -1,7 +1,7 @@
 // Ban a user from the server.
 
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -39,7 +39,7 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -54,7 +54,7 @@ module.exports = {
     if (
       (member.roles &&
         member.roles.cache.some((role) => role.id === modRole?.value)) ||
-        member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You cannot ban a moderator.",
@@ -62,14 +62,14 @@ module.exports = {
       });
     }
 
-    dmEmbed = new MessageEmbed()
-      .setColor("RED")
+    dmEmbed = new EmbedBuilder()
+      .setColor("Red")
       .setTitle("Banned")
       .setDescription(`You have been banned from ${interaction.guild.name}.`)
       .setTimestamp()
       .addFields({ name: "Reason", value: reason, inline: true })
       .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`);
-    await member.send({ embeds: [dmEmbed] }).catch((err) => {});
+    await member.send({ embeds: [dmEmbed] }).catch((err) => { });
 
     if (purge) {
       await member.ban({ reason: reason, days: 7 });
@@ -85,8 +85,8 @@ module.exports = {
       });
     }
 
-    confirmation = new MessageEmbed()
-      .setColor("RED")
+    confirmation = new EmbedBuilder()
+      .setColor("Red")
       .setTitle("Discord User Banned")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({
@@ -98,15 +98,15 @@ module.exports = {
       )
       .setTimestamp();
 
-      const logChannel = await interaction.client.db.settings.findOne({
-        attributes: ["value"],
-        where: { name: "logChannel", guild: interaction.guild.id },
-      });
-  
-      if (logChannel) {
-        await interaction.client.channels.cache
-          .get(logChannel.value)
-          .send({ embeds: [confirmation] });
-      }
+    const logChannel = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "logChannel", guild: interaction.guild.id },
+    });
+
+    if (logChannel) {
+      await interaction.client.channels.cache
+        .get(logChannel.value)
+        .send({ embeds: [confirmation] });
+    }
   },
 };

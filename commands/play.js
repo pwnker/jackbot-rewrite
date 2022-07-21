@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -6,17 +6,8 @@ module.exports = {
     .setDescription("Play a song from the interwebs.")
     .addStringOption((option) =>
       option.setName("query").setDescription("The song to play.")
-	  .setRequired(true)
-    )
-    .addStringOption((option) =>
-    option
-      .setName("search-type")
-      .setDescription("The type of search to use.")
-      .addChoices(
-        { name: 'YouTube', value: '0' },
-        { name: 'SoundCloud', value: '3' },
-      )
-  ),
+        .setRequired(true)
+    ),
 
 
   async execute(interaction) {
@@ -27,15 +18,13 @@ module.exports = {
       });
     }
 
-    await interaction.deferReply({ephemeral: true});
+    await interaction.deferReply({ ephemeral: true });
     const guild = interaction.guild;
     const channel = interaction.channel;
     const query = interaction.options.get("query").value;
-    const searchMode = parseInt(interaction.options.get("search-type")?.value);
-    
+
     const searchResult = await interaction.client.player.search(query, {
       requestedBy: interaction.user,
-      searchEngine: searchMode ? searchMode : 0,
     });
     if (!searchResult || !searchResult.tracks.length)
       return interaction.followUp({ content: "No results were found!" });
@@ -47,11 +36,14 @@ module.exports = {
         dlChunkSize: 0,
       },
       metadata: channel,
+      leaveOnEmptyCooldown: 30000,
+      leaveOnEnd: false
     });
-
+    
+    queue.repeatmode = "OFF"
     queue.votes = []
 
-	
+
 
     const member = interaction.member;
     try {
@@ -64,9 +56,8 @@ module.exports = {
     }
 
     await interaction.followUp({
-      content: `⏱ | Loading ${
-        searchResult.playlist ? searchResult.playlist.tracks.length + " songs from " + searchResult.playlist.title : searchResult.tracks[0].title + " by " + searchResult.tracks[0].author
-      }...`,
+      content: `⏱ | Loading ${searchResult.playlist ? searchResult.playlist.tracks.length + " songs from " + searchResult.playlist.title : searchResult.tracks[0].title + " by " + searchResult.tracks[0].author
+        }...`,
     });
     searchResult.playlist
       ? queue.addTracks(searchResult.tracks)

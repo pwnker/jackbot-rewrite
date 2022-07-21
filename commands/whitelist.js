@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 const { Rcon } = require("rcon-client")
 
 
@@ -48,9 +48,9 @@ module.exports = {
 
     rcon.end()
 
-    embed = new MessageEmbed()
+    embed = new EmbedBuilder()
       .setTitle("Command Sent")
-      .setColor("GREEN")
+      .setColor("Green")
       .setDescription(`\`\`\`${response}\`\`\``);
 
     interaction.reply({ embeds: [embed], ephemeral: true });

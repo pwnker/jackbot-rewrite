@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, Formatters } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, Formatters } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,9 +13,9 @@ module.exports = {
         ephemeral: true,
       });
     }
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle(interaction.guild.name)
-      .setColor("AQUA")
+      .setColor("Aqua")
       .setThumbnail(interaction.guild.iconURL())
       .addFields(
         {
@@ -43,7 +43,7 @@ module.exports = {
           value: Formatters.time(interaction.guild.createdAt, "R"),
         }
       )
-      .setFooter({text: `ID: ${interaction.guild.id}`});
+      .setFooter({ text: `ID: ${interaction.guild.id}` });
 
     await interaction.reply({ embeds: [embed] });
   },

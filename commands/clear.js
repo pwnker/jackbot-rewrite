@@ -1,6 +1,6 @@
 
 
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -25,7 +25,7 @@ module.exports = {
       (interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) ||
-        interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR))
+        interaction.member.permissions.has(PermissionsBitField.Flags.Administrator))
     ) {
       queue.clear();
       return interaction.reply({

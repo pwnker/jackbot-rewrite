@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, Embed } = require("@discordjs/builders");
-const { MessageEmbed, Guild, Permissions } = require("discord.js");
+const { SlashCommandBuilder, Embed } = require("discord.js");
+const { EmbedBuilder, Guild, PermissionsBitField } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -33,7 +33,7 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -46,7 +46,7 @@ module.exports = {
     if (
       (member.roles &&
         member.roles.cache.some((role) => role.id === modRole?.value)) ||
-      member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You cannot kick a moderator.",
@@ -54,8 +54,8 @@ module.exports = {
       });
     }
 
-    dmEmbed = new MessageEmbed()
-      .setColor("RED")
+    dmEmbed = new EmbedBuilder()
+      .setColor("Red")
       .setTitle("Kicked")
       .setDescription(
         `You have been kicked from ${interaction.guild.name}. You can join back at any time however you should resolve the issue described in the kick reason to avoid further punishment.`
@@ -72,8 +72,8 @@ module.exports = {
       ephemeral: true,
     });
 
-    confirmation = new MessageEmbed()
-      .setColor("RED")
+    confirmation = new EmbedBuilder()
+      .setColor("Red")
       .setTitle("User Kicked")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({

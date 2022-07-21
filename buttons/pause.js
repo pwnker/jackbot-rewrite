@@ -1,8 +1,8 @@
 const {
-  MessageEmbed,
-  MessageActionRow,
-  MessageButton,
-  Permissions,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  PermissionsBitField,
 } = require("discord.js");
 
 module.exports = {

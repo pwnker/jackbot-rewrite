@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, Embed } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
+const { SlashCommandBuilder, Embed } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -31,7 +31,7 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -55,8 +55,8 @@ module.exports = {
       ephemeral: true,
     });
 
-    confirmation = new MessageEmbed()
-      .setColor("AQUA")
+    confirmation = new EmbedBuilder()
+      .setColor("Aqua")
       .setTitle("User Unmuted")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({
@@ -79,8 +79,8 @@ module.exports = {
         .send({ embeds: [confirmation] });
     }
 
-    dmEmbed = new MessageEmbed()
-      .setColor("AQUA")
+    dmEmbed = new EmbedBuilder()
+      .setColor("Aqua")
       .setTitle("Unmuted")
       .setDescription(
         `You have been unmuted in ${interaction.guild.name}. You can now interact with the server again.`
@@ -88,6 +88,6 @@ module.exports = {
       .setTimestamp()
       .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`);
 
-    await member.send({ embeds: [dmEmbed] }).catch((err) => {});
+    await member.send({ embeds: [dmEmbed] }).catch((err) => { });
   },
 };

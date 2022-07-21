@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 const {
-  MessageEmbed,
-  MessageActionRow,
-  MessageButton,
-  Permissions,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  PermissionsBitField,
+  ButtonStyle,
 } = require("discord.js");
 
 module.exports = {
@@ -21,7 +22,7 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === adminRole?.value
       ) &&
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -32,12 +33,12 @@ module.exports = {
     first = await interaction.channel.messages.fetch({ limit: 30 });
     msg = first.last().url;
 
-    embed = new MessageEmbed()
+    embed = new EmbedBuilder()
       .setTitle(`Welcome to ${interaction.guild.name}!`)
-      .setColor("AQUA");
+      .setColor("Aqua");
 
-    const row = new MessageActionRow().addComponents(
-      new MessageButton().setLabel("Scroll to top").setStyle("LINK").setURL(msg)
+    const row = new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setLabel("Scroll to top").setStyle(ButtonStyle.Link).setURL(msg)
     );
 
     await interaction.channel.send({ embeds: [embed], components: [row] });

@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, Formatters } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, Formatters } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,9 +12,9 @@ module.exports = {
         members = 0
         client.guilds.cache.forEach((guild) => { members += guild.memberCount })
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle("Jackbot Stats")
-            .setColor("AQUA")
+            .setColor("Aqua")
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setFooter({ text: `Watching ${members} total members.` })
             .addFields(

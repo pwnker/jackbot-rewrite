@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, Embed } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
+const { SlashCommandBuilder, Embed } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -36,7 +36,7 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -51,7 +51,7 @@ module.exports = {
     if (
       (member.roles &&
         member.roles.cache.some((role) => role.id === modRole?.value)) ||
-        member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       return interaction.reply({
         content: "You cannot mute a moderator.",
@@ -80,8 +80,8 @@ module.exports = {
       ephemeral: true,
     });
 
-    confirmation = new MessageEmbed()
-      .setColor("RED")
+    confirmation = new EmbedBuilder()
+      .setColor("Red")
       .setTitle("User Muted")
       .setThumbnail(user.displayAvatarURL({ dynamic: true }))
       .setFooter({
@@ -94,25 +94,25 @@ module.exports = {
       )
       .setTimestamp();
 
-      const logChannel = await interaction.client.db.settings.findOne({
-        attributes: ["value"],
-        where: { name: "logChannel", guild: interaction.guild.id },
-      });
-  
-      if (logChannel) {
-        await interaction.client.channels.cache
-          .get(logChannel.value)
-          .send({ embeds: [confirmation] });
-      }
+    const logChannel = await interaction.client.db.settings.findOne({
+      attributes: ["value"],
+      where: { name: "logChannel", guild: interaction.guild.id },
+    });
 
-    dmEmbed = new MessageEmbed()
-      .setColor("RED")
+    if (logChannel) {
+      await interaction.client.channels.cache
+        .get(logChannel.value)
+        .send({ embeds: [confirmation] });
+    }
+
+    dmEmbed = new EmbedBuilder()
+      .setColor("Red")
       .setTitle("Muted")
       .setDescription(`You have been muted in ${interaction.guild.name}.`)
       .addFields({ name: "Reason", value: reason, inline: true })
       .setTimestamp()
       .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`);
 
-    await member.send({ embeds: [dmEmbed] }).catch((err) => {});
+    await member.send({ embeds: [dmEmbed] }).catch((err) => { });
   },
 };

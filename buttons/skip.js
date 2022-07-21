@@ -1,8 +1,9 @@
 const {
   MessageEmbed,
-  MessageActionRow,
-  MessageButton,
-  Permissions,
+  ActionRowBuilder,
+  ButtonBuilder,
+  PermissionsBitField,
+  ButtonStyle,
 } = require("discord.js");
 
 module.exports = {
@@ -10,24 +11,24 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.member.voice.channel) {
       return interaction.reply({
-        content: "You must be in a voice channel to skip a song.",
+        content: "❌ | You must be in a voice channel to skip a song.",
         ephemeral: true,
       });
     }
 
     const queue = interaction.client.player.getQueue(interaction.guildId);
-    
+
     if (!queue || !queue.playing) {
       return await interaction.reply({
-        content: "No music is being played.",
+        content: "❌ | No music is being played.",
         ephemeral: true,
       });
     }
 
-   
+
     if (queue.votes.includes(interaction.member.id)) {
       return interaction.reply({
-        content: "You already voted to skip this song.",
+        content: "❌ | You already voted to skip this song.",
         ephemeral: true,
       });
     }
@@ -42,23 +43,21 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
     ) {
       queue.votes.push(interaction.member.id);
-      const row = new MessageActionRow().addComponents(
-        new MessageButton()
+      const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
           .setLabel("Vote to skip")
-          .setStyle("SUCCESS")
+          .setStyle(ButtonStyle.Success)
           .setCustomId("skip")
           .setEmoji("⏭")
       );
 
       interaction.reply({
-        content: `**${
-          interaction.member.displayName
-        }** has voted to skip the current song. **${
-          queue.votes.length
-        }/${Math.ceil(interaction.member.voice.channel.members.size / 2)}**.`,
+        content: `**${interaction.member.displayName
+          }** has voted to skip the current song. **${queue.votes.length
+          }/${Math.ceil(interaction.member.voice.channel.members.size / 2)}**.`,
         components: [row],
       });
 
@@ -68,14 +67,6 @@ module.exports = {
       ) {
         queue.skip();
         queue.votes = [];
-        row = interaction.message.components[0]
-      editedRow = row.components.forEach(button => {
-          if (button.customId === "skip") {
-            button.setDisabled(true);
-          }
-      });
-      await interaction.message.edit({
-          components: [row],});
         return interaction.followUp({
           content: `⏭ | Skipped the current song.`,
         });
@@ -83,14 +74,6 @@ module.exports = {
     } else {
       queue.skip();
       queue.votes = [];
-      row = interaction.message.components[0]
-      editedRow = row.components.forEach(button => {
-          if (button.customId === "skip") {
-            button.setDisabled(true);
-          }
-      });
-      await interaction.message.edit({
-          components: [row],});
       return interaction.reply({
         content: `⏭ | Skipped the current song.`,
       });

@@ -1,6 +1,6 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, Permissions } = require("discord.js");
-const { Rcon } =  require("rcon-client")
+const { SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
+const { Rcon } = require("rcon-client")
 
 
 
@@ -18,14 +18,14 @@ module.exports = {
 
   async execute(interaction) {
     if (interaction.user.id != 557106447771500545) {
-        return interaction.reply({
-          content: "This command can only be used in whitelisted guilds.",
-          ephemeral: true,
-        });
-      }
+      return interaction.reply({
+        content: "This command can only be used in whitelisted guilds.",
+        ephemeral: true,
+      });
+    }
 
-      const rcon = await Rcon.connect({
-        host: "mc", port: 25575, password: process.env.RCON_PASS
+    const rcon = await Rcon.connect({
+      host: "mc", port: 25575, password: process.env.RCON_PASS
     })
 
     const command = interaction.options.get("command").value;
@@ -33,10 +33,10 @@ module.exports = {
     const response = await rcon.send(command)
 
     rcon.end()
-    
-    embed = new MessageEmbed()
+
+    embed = new EmbedBuilder()
       .setTitle("Command Sent")
-      .setColor("GREEN")
+      .setColor("Green")
       .setDescription(`\`\`\`${response}\`\`\``);
 
     interaction.reply({ embeds: [embed], ephemeral: true });

@@ -1,14 +1,14 @@
 
 
-const {SlashCommandBuilder} = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName("pause")
-        .setDescription("Pause the current song."),
+  data: new SlashCommandBuilder()
+    .setName("pause")
+    .setDescription("Pause the current song."),
 
 
-async execute(interaction) {
+  async execute(interaction) {
     if (!interaction.member.voice.channel) {
       return await interaction.reply({
         content: "You must be in a voice channel to use this command.",
@@ -25,14 +25,14 @@ async execute(interaction) {
     }
 
     if (queue.paused) {
-        return interaction.reply({ content: "Music is already paused." , ephemeral: true});
+      return interaction.reply({ content: "Music is already paused.", ephemeral: true });
     } else {
-   
+
       queue.setPaused(true);
       queue.paused = true;
       return interaction.reply({ content: "⏸ | Music Paused!", ephemeral: false });
 
-      }
-    
+    }
+
   },
 }

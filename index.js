@@ -4,20 +4,23 @@ const { Player } = require("discord-player");
 const {
   Client,
   Collection,
-  Intents,
-  MessageEmbed,
-  MessageActionRow,
-  MessageButton,
+  GatewayIntentBits,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  InteractionType,
+  ChannelType,
 } = require("discord.js");
 const dotenv = require("dotenv");
 dotenv.config();
 
 const client = new Client({
   intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MEMBERS,
-    Intents.FLAGS.GUILD_MESSAGES,
-    Intents.FLAGS.GUILD_VOICE_STATES,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildVoiceStates,
   ],
 });
 
@@ -36,12 +39,12 @@ for (const file of commandFiles) {
 }
 
 client.on("interactionCreate", async (interaction) => {
-  if (interaction.isCommand()) {
+  if (interaction.type === InteractionType.ApplicationCommand) {
     const command = client.commands.get(interaction.commandName);
 
     if (!command) return;
 
-    if (!interaction.guild) {
+    if (interaction.channel.type === ChannelType.DM) {
       return await interaction.reply({
         content: "You can only use this command in a server.",
         ephemeral: true,
@@ -62,8 +65,8 @@ client.on("interactionCreate", async (interaction) => {
 
       console.error(error);
 
-      errorEmbed = new MessageEmbed()
-        .setColor("RED")
+      errorEmbed = new EmbedBuilder()
+        .setColor("Red")
         .setTitle(error.name)
         .setDescription("```" + error.stack + "```")
         .setTimestamp();
@@ -86,7 +89,7 @@ client.on("interactionCreate", async (interaction) => {
     }
   }
 
-  if (interaction.isAutocomplete()) {
+  if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
     if (!interaction.guild) return;
     if (interaction.commandName == "tag") {
       var options = await client.db.tags.findAll({
@@ -143,8 +146,8 @@ client.on("interactionCreate", async (interaction) => {
     await button.execute(interaction);
   } catch (error) {
     console.error(error);
-    errorEmbed = new MessageEmbed()
-      .setColor("RED")
+    errorEmbed = new EmbedBuilder()
+      .setColor("Red")
       .setTitle(error.name)
       .setDescription("```" + error.stack + "```");
 
@@ -183,8 +186,8 @@ client.on("interactionCreate", async (interaction) => {
     await menu.execute(interaction);
   } catch (error) {
     console.error(error);
-    errorEmbed = new MessageEmbed()
-      .setColor("RED")
+    errorEmbed = new EmbedBuilder()
+      .setColor("Red")
       .setTitle(error.name)
       .setDescription("```" + error.stack + "```");
 
@@ -251,8 +254,8 @@ client.db.settings = client.db.define("settings", {
 
 process.on("unhandledRejection", (error) => {
   console.error("Unhandled promise rejection:", error);
-  errorEmbed = new MessageEmbed()
-    .setColor("RED")
+  errorEmbed = new EmbedBuilder()
+    .setColor("Red")
     .setTitle(error.name)
     .setDescription("```" + error.stack + "```");
 
@@ -263,8 +266,8 @@ process.on("unhandledRejection", (error) => {
 
 client.on("shardError", (error) => {
   console.error("A websocket connection encountered an error:", error);
-  errorEmbed = new MessageEmbed()
-    .setColor("RED")
+  errorEmbed = new EmbedBuilder()
+    .setColor("Red")
     .setTitle(error.name)
     .setDescription("```" + error.stack + "```");
 
@@ -276,36 +279,39 @@ client.on("shardError", (error) => {
 // Music
 client.player = new Player(client);
 
-musicEmbed = new MessageEmbed().setColor("GREEN");
+musicEmbed = new EmbedBuilder().setColor("Green");
 
-musicRow = new MessageActionRow().addComponents(
-  new MessageButton()
+musicRow = new ActionRowBuilder().addComponents(
+  new ButtonBuilder()
     .setCustomId("playPause")
     .setLabel("⏯️")
-    .setStyle("PRIMARY"),
-  new MessageButton().setCustomId("skip").setLabel("⏭️").setStyle("DANGER")
+    .setStyle(ButtonStyle.Primary),
+  new ButtonBuilder().setCustomId("skip").setLabel("⏭️").setStyle(ButtonStyle.Danger)
 );
 
 client.player.on("trackStart", (queue, track) => {
   musicEmbed.setTitle(`Now playing: ${track.title}`);
   musicEmbed.setFooter({
-    text: `Requested by: ${track.requestedBy.username} | ${track.source}`,
+    text: `Requested by: ${track.requestedBy.username} | ${track.source} | Autoplay: ${queue.repeatmode}`,
   });
   musicEmbed.setThumbnail(track.thumbnail);
   musicEmbed.setDescription(
     `[${track.title}](${track.url}) by ${track.author}`
   );
 
-  musicRow = new MessageActionRow().addComponents(
-    new MessageButton()
+  musicRow = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
       .setCustomId("playPause")
       .setEmoji("⏯️")
-      .setStyle("SECONDARY"),
-    new MessageButton()
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
       .setCustomId("skip")
       .setEmoji(`⏭️`)
-      .setStyle("SECONDARY"),
-    new MessageButton().setCustomId("clear").setEmoji("🗑️").setStyle("DANGER")
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
+    .setCustomId("clear")
+    .setEmoji("🗑️")
+    .setStyle(ButtonStyle.Danger)
   );
 
   queue.metadata.send({ embeds: [musicEmbed], components: [musicRow] });
@@ -326,13 +332,13 @@ client.player.on("channelEmpty", (queue) => {
 });
 
 client.player.on("queueEnd", (queue) => {
-  queue.metadata.send("✅ | Queue finished, see you later!");
+  queue.metadata.send("✅ | Queue finished!");
 });
 
 client.player.on("error", (queue, error) => {
   console.log(error);
-  errorEmbed = new MessageEmbed()
-    .setColor("RED")
+  errorEmbed = new EmbedBuilder()
+    .setColor("Red")
     .setTitle(error.name)
     .setDescription("```" + error.stack + "```");
 
@@ -343,8 +349,8 @@ client.player.on("error", (queue, error) => {
 
 client.player.on("connectionError", (queue, error) => {
   console.log(error);
-  errorEmbed = new MessageEmbed()
-    .setColor("RED")
+  errorEmbed = new EmbedBuilder()
+    .setColor("Red")
     .setTitle(error.name)
     .setDescription("```" + error.stack + "```");
 

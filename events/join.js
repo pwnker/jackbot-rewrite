@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
   name: "guildMemberAdd",
@@ -18,13 +18,13 @@ module.exports = {
       await member.roles.add(joinRole.value);
     }
 
-    embed = new MessageEmbed()
+    embed = new EmbedBuilder()
       .setTitle("Welcome to the server!")
       .setDescription(
         `Hey <@${member.id}>, welcome to **${member.guild.name}**!`
       )
       .setTimestamp()
-      .setColor("AQUA")
+      .setColor("Aqua")
       .setFooter({ text: `Member #${member.guild.memberCount}` })
       .setThumbnail(member.displayAvatarURL({ dynamic: true }));
 
