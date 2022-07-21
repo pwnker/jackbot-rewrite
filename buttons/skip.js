@@ -68,14 +68,14 @@ module.exports = {
         queue.skip();
         queue.votes = [];
         return interaction.followUp({
-          content: `⏭ | Skipped the current song.`,
+          content: `⏭ | Song Skipped.`,
         });
       }
     } else {
       queue.skip();
       queue.votes = [];
       return interaction.reply({
-        content: `⏭ | Skipped the current song.`,
+        content: `⏭ | Song skipped.`,
       });
     }
   },
