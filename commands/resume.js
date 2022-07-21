@@ -8,7 +8,7 @@ module.exports = {
   async execute(interaction) {
     if (!interaction.member.voice.channel) {
       return await interaction.reply({
-        content: "You must be in a voice channel to use this command.",
+        content: "❌ | You must be in a voice channel to use this command.",
         ephemeral: true,
       });
     }
@@ -17,7 +17,7 @@ module.exports = {
     const queue = interaction.client.player.getQueue(interaction.guildId);
     if (!queue || !queue.playing) {
       return await interaction.reply({
-        content: "No music is being played.",
+        content: "❌ | No music is being played.",
         ephemeral: true,
       });
     }
@@ -27,7 +27,7 @@ module.exports = {
       return interaction.reply({ content: "▶️ | Music Resumed!", ephemeral: false });
     } else {
       return await interaction.reply({
-        content: "Music is aleady playing.",
+        content: "❌ | Music is aleady playing.",
         ephemeral: true,
       });
     }
