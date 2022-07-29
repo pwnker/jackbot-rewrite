@@ -34,7 +34,9 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
+      !interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      )
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -90,7 +92,7 @@ module.exports = {
       .addFields({ name: "Reason", value: reason, inline: true })
       .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`);
 
-    await member.send({ embeds: [dmEmbed] }).catch((err) => { });
+    await member.send({ embeds: [dmEmbed] }).catch((err) => {});
     await interaction.reply({
       content: `<@${user.id}> has been warned.`,
       ephemeral: true,

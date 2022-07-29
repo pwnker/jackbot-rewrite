@@ -5,5 +5,5 @@ dotenv.config();
 
 module.exports = {
   customId: "someMenu",
-  async execute(interaction) { },
+  async execute(interaction) {},
 };

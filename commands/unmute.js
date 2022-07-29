@@ -31,7 +31,9 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
+      !interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      )
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -88,6 +90,6 @@ module.exports = {
       .setTimestamp()
       .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`);
 
-    await member.send({ embeds: [dmEmbed] }).catch((err) => { });
+    await member.send({ embeds: [dmEmbed] }).catch((err) => {});
   },
 };

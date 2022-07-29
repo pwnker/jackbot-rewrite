@@ -1,12 +1,9 @@
-
-
 const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("pause")
     .setDescription("Pause the current song."),
-
 
   async execute(interaction) {
     if (!interaction.member.voice.channel) {
@@ -25,14 +22,17 @@ module.exports = {
     }
 
     if (queue.paused) {
-      return interaction.reply({ content: "❌ | Music is already paused.", ephemeral: true });
+      return interaction.reply({
+        content: "❌ | Music is already paused.",
+        ephemeral: true,
+      });
     } else {
-
       queue.setPaused(true);
       queue.paused = true;
-      return interaction.reply({ content: "⏸ | Music Paused!", ephemeral: false });
-
+      return interaction.reply({
+        content: "⏸ | Music Paused!",
+        ephemeral: false,
+      });
     }
-
   },
-}
+};

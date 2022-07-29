@@ -110,7 +110,9 @@ module.exports = {
         !interaction.member.roles.cache.some(
           (role) => role.id === modRole?.value
         ) &&
-        !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
+        !interaction.member.permissions.has(
+          PermissionsBitField.Flags.Administrator
+        )
       ) {
         return interaction.reply({
           content: "You do not have permission to create a tag.",
@@ -147,7 +149,9 @@ module.exports = {
         !interaction.member.roles.cache.some(
           (role) => role.id === adminRole?.value
         ) ||
-        !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
+        !interaction.member.permissions.has(
+          PermissionsBitField.Flags.Administrator
+        )
       ) {
         return interaction.reply({
           content: "You do not have permission to edit a tag.",
@@ -182,7 +186,9 @@ module.exports = {
         !interaction.member.roles.cache.some(
           (role) => role.id === adminRole?.value
         ) ||
-        !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
+        !interaction.member.permissions.has(
+          PermissionsBitField.Flags.Administrator
+        )
       ) {
         return interaction.reply({
           content: "You do not have permission to remove a tag.",

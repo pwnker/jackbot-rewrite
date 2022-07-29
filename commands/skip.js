@@ -46,7 +46,9 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
+      !interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      )
     ) {
       queue.votes.push(interaction.member.id);
       const row = new ActionRowBuilder().addComponents(
@@ -58,9 +60,11 @@ module.exports = {
       );
 
       interaction.reply({
-        content: `**${interaction.member.displayName
-          }** has voted to skip the current song. **${queue.votes.length
-          }/${Math.ceil(interaction.member.voice.channel.members.size / 2)}**.`,
+        content: `**${
+          interaction.member.displayName
+        }** has voted to skip the current song. **${
+          queue.votes.length
+        }/${Math.ceil(interaction.member.voice.channel.members.size / 2)}**.`,
         components: [row],
       });
 

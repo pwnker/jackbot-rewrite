@@ -23,7 +23,8 @@ module.exports = {
       .setColor("Green")
       .setThumbnail(queue.current.thumbnail)
       .setDescription(
-        `🎶 | **${queue.current.title}** by **${queue.current.author}** (\`${perc.progress == "Infinity" ? "Live" : perc.progress + "%"
+        `🎶 | **${queue.current.title}** by **${queue.current.author}** (\`${
+          perc.progress == "Infinity" ? "Live" : perc.progress + "%"
         }\`)`
       )
       .addFields({

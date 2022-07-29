@@ -6,7 +6,6 @@ module.exports = {
     .setDescription("Shuffle the queue."),
 
   async execute(interaction) {
-
     const queue = interaction.client.player.getQueue(interaction.guildId);
     if (!queue || !queue.playing)
       return interaction.reply({

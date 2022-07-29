@@ -55,12 +55,12 @@ module.exports = {
             .setDescription("The setting to reset.")
             .setRequired(true)
             .addChoices(
-              { name: 'Moderator Role', value: 'modRole' },
-              { name: 'Admin Role', value: 'adminRole' },
-              { name: 'Log Channel', value: 'logChannel' },
-              { name: 'Welcome Channel', value: 'welcomeChannel' },
-              { name: 'Join Role', value: 'joinRole' },
-              { name: 'All', value: 'all' },
+              { name: "Moderator Role", value: "modRole" },
+              { name: "Admin Role", value: "adminRole" },
+              { name: "Log Channel", value: "logChannel" },
+              { name: "Welcome Channel", value: "welcomeChannel" },
+              { name: "Join Role", value: "joinRole" },
+              { name: "All", value: "all" }
             )
         )
     )
@@ -85,7 +85,9 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === adminRole?.value
       ) &&
-      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
+      !interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      )
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",

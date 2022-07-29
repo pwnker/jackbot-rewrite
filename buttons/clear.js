@@ -23,10 +23,12 @@ module.exports = {
 
     if (
       interaction.member.voice.channel.members.size <= 2 ||
-      (interaction.member.roles.cache.some(
+      interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) ||
-        interaction.member.permissions.has(PermissionsBitField.Flags.Administrator))
+      interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      )
     ) {
       queue.clear();
       return interaction.reply({
