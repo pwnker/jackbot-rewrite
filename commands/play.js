@@ -5,10 +5,11 @@ module.exports = {
     .setName("play")
     .setDescription("Play a song from the interwebs.")
     .addStringOption((option) =>
-      option.setName("query").setDescription("The song to play.")
+      option
+        .setName("query")
+        .setDescription("The song to play.")
         .setRequired(true)
     ),
-
 
   async execute(interaction) {
     if (!interaction.member.voice.channel) {
@@ -37,12 +38,10 @@ module.exports = {
       },
       metadata: channel,
       leaveOnEmptyCooldown: 30000,
-      leaveOnEnd: false
+      leaveOnEnd: false,
     });
- 
-    queue.votes = []
 
-
+    queue.votes = [];
 
     const member = interaction.member;
     try {
@@ -55,8 +54,15 @@ module.exports = {
     }
 
     await interaction.followUp({
-      content: `⏱ | Loading ${searchResult.playlist ? searchResult.playlist.tracks.length + " songs from " + searchResult.playlist.title : searchResult.tracks[0].title + " by " + searchResult.tracks[0].author
-        }...`,
+      content: `⏱ | Loading ${
+        searchResult.playlist
+          ? searchResult.playlist.tracks.length +
+            " songs from " +
+            searchResult.playlist.title
+          : searchResult.tracks[0].title +
+            " by " +
+            searchResult.tracks[0].author
+      }...`,
     });
     searchResult.playlist
       ? queue.addTracks(searchResult.tracks)

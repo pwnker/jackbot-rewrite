@@ -15,7 +15,6 @@ module.exports = {
       });
     }
 
-
     const queue = interaction.client.player.getQueue(interaction.guildId);
     if (!queue || !queue.playing) {
       return await interaction.reply({
@@ -34,7 +33,10 @@ module.exports = {
     } else {
       queue.setPaused(true);
       queue.paused = true;
-      return interaction.reply({ content: "⏸ | Music Paused!", ephemeral: false });
+      return interaction.reply({
+        content: "⏸ | Music Paused!",
+        ephemeral: false,
+      });
     }
   },
 };

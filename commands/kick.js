@@ -12,9 +12,7 @@ module.exports = {
         .setRequired(true)
     )
     .addStringOption((option) =>
-      option
-        .setName("reason")
-        .setDescription("Reason for kicking the user.")
+      option.setName("reason").setDescription("Reason for kicking the user.")
     ),
 
   async execute(interaction) {
@@ -33,7 +31,10 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) && interaction.member.id != 557106447771500545n
+      !interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      ) &&
+      interaction.member.id != 557106447771500545n
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -64,7 +65,7 @@ module.exports = {
       .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`)
       .addFields({ name: "Reason", value: reason, inline: true });
 
-    await member.send({ embeds: [dmEmbed] }).catch((err) => { });
+    await member.send({ embeds: [dmEmbed] }).catch((err) => {});
 
     await member.kick({ reason: reason });
     await interaction.reply({

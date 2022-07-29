@@ -1,8 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { EmbedBuilder, PermissionsBitField } = require("discord.js");
-const { Rcon } = require("rcon-client")
-
-
+const { Rcon } = require("rcon-client");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -20,11 +18,10 @@ module.exports = {
         .setDescription("The player's Minecraft Edition")
         .setRequired(true)
         .addChoices(
-          { name: 'Java', value: 'java' },
-          { name: 'Bedrock', value: 'bedrock' }
+          { name: "Java", value: "java" },
+          { name: "Bedrock", value: "bedrock" }
         )
     ),
-
 
   async execute(interaction) {
     if (interaction.user.id != 557106447771500545) {
@@ -35,18 +32,20 @@ module.exports = {
     }
 
     const rcon = await Rcon.connect({
-      host: "mc", port: 25575, password: process.env.RCON_PASS
-    })
+      host: "mc",
+      port: 25575,
+      password: process.env.RCON_PASS,
+    });
 
     const username = interaction.options.getString("username");
 
-    if (interaction.options.getString("editon") == 'java') {
-      var response = await rcon.send(`whitelist add ${username}`)
+    if (interaction.options.getString("editon") == "java") {
+      var response = await rcon.send(`whitelist add ${username}`);
     } else {
-      var response = await rcon.send(`fwhitelist add ${username}`)
+      var response = await rcon.send(`fwhitelist add ${username}`);
     }
 
-    rcon.end()
+    rcon.end();
 
     embed = new EmbedBuilder()
       .setTitle("Command Sent")

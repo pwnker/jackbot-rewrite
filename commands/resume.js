@@ -13,7 +13,6 @@ module.exports = {
       });
     }
 
-
     const queue = interaction.client.player.getQueue(interaction.guildId);
     if (!queue || !queue.playing) {
       return await interaction.reply({
@@ -24,7 +23,10 @@ module.exports = {
     if (queue.paused) {
       queue.setPaused(false);
       queue.paused = false;
-      return interaction.reply({ content: "▶️ | Music Resumed!", ephemeral: false });
+      return interaction.reply({
+        content: "▶️ | Music Resumed!",
+        ephemeral: false,
+      });
     } else {
       return await interaction.reply({
         content: "❌ | Music is aleady playing.",

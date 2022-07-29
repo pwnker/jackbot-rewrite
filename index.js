@@ -55,7 +55,8 @@ client.on("interactionCreate", async (interaction) => {
       await command.execute(interaction);
     } catch (error) {
       if (error.code === 50013) {
-        var errorMsg = "Jackbot does not have the correct permissions to run this command."
+        var errorMsg =
+          "Jackbot does not have the correct permissions to run this command.";
         if (interaction.deferred) {
           return interaction.editReply(errorMsg);
         } else {
@@ -79,7 +80,7 @@ client.on("interactionCreate", async (interaction) => {
         content:
           "There was an error while executing this command! This error has been reported.",
         ephemeral: true,
-      }
+      };
 
       if (interaction.deferred) {
         return interaction.editReply(errorMsg);
@@ -158,7 +159,7 @@ client.on("interactionCreate", async (interaction) => {
       content:
         "There was an error while executing this command! This error has been reported.",
       ephemeral: true,
-    }
+    };
 
     if (interaction.deferred) {
       return interaction.editReply(errorMsg);
@@ -198,7 +199,7 @@ client.on("interactionCreate", async (interaction) => {
       content:
         "There was an error while executing this command! This error has been reported.",
       ephemeral: true,
-    }
+    };
 
     if (interaction.deferred) {
       return interaction.editReply(errorMsg);
@@ -286,7 +287,10 @@ musicRow = new ActionRowBuilder().addComponents(
     .setCustomId("playPause")
     .setLabel("⏯️")
     .setStyle(ButtonStyle.Primary),
-  new ButtonBuilder().setCustomId("skip").setLabel("⏭️").setStyle(ButtonStyle.Danger)
+  new ButtonBuilder()
+    .setCustomId("skip")
+    .setLabel("⏭️")
+    .setStyle(ButtonStyle.Danger)
 );
 
 client.player.on("trackStart", (queue, track) => {
@@ -309,9 +313,9 @@ client.player.on("trackStart", (queue, track) => {
       .setEmoji(`⏭️`)
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
-    .setCustomId("clear")
-    .setEmoji("🗑️")
-    .setStyle(ButtonStyle.Danger)
+      .setCustomId("clear")
+      .setEmoji("🗑️")
+      .setStyle(ButtonStyle.Danger)
   );
 
   queue.metadata.send({ embeds: [musicEmbed], components: [musicRow] });

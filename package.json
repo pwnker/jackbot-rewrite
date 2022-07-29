@@ -10,10 +10,12 @@
     "ffmpeg-static": "^4.4.1",
     "got": "^11.8.3",
     "pg": "^8.7.3",
+    "prettier": "^2.7.1",
     "rcon-client": "^4.2.3",
     "sequelize": "^6.15.1"
   },
   "scripts": {
-    "start": "node cmd_deploy.js && node ."
+    "start": "node cmd_deploy.js && node .",
+    "pretty": "prettier --write \"./**/*.{js,jsx,json}\""
   }
 }

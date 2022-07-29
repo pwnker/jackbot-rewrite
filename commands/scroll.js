@@ -22,7 +22,10 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === adminRole?.value
       ) &&
-      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) && interaction.member.id != 557106447771500545n
+      !interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      ) &&
+      interaction.member.id != 557106447771500545n
     ) {
       return interaction.reply({
         content: "You do not have permission to use this command.",
@@ -38,7 +41,10 @@ module.exports = {
       .setColor("Aqua");
 
     const row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setLabel("Scroll to top").setStyle(ButtonStyle.Link).setURL(msg)
+      new ButtonBuilder()
+        .setLabel("Scroll to top")
+        .setStyle(ButtonStyle.Link)
+        .setURL(msg)
     );
 
     await interaction.channel.send({ embeds: [embed], components: [row] });
