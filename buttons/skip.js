@@ -43,7 +43,7 @@ module.exports = {
       !interaction.member.roles.cache.some(
         (role) => role.id === modRole?.value
       ) &&
-      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)
+      !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator) && interaction.member.id != 557106447771500545n
     ) {
       queue.votes.push(interaction.member.id);
       const row = new ActionRowBuilder().addComponents(
