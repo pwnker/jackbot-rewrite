@@ -94,8 +94,7 @@ module.exports = {
       ) &&
       !interaction.member.permissions.has(
         PermissionsBitField.Flags.Administrator
-      ) &&
-      interaction.member.id != 557106447771500545n
+      )
     ) {
       return interaction.editReply({
         content: "You do not have permission to use this command.",
